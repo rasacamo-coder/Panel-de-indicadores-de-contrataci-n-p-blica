@@ -94,38 +94,39 @@ No se define una clave natural ni se eliminan registros por duplicidad. Las
 primeras implementaciones deberían informar de posibles colisiones para
 revisión, conservando los registros originales.
 
-## Propuesta de comprobaciones de calidad
+## Validación de calidad: implementado y pendiente
 
-El extractor actual comprueba la estructura general de la respuesta y que cada
-elemento de `items` sea un objeto JSON; no valida el esquema semántico de los
-campos. Una futura validación debería mantener separadas estas capas y comenzar
-en modo informativo:
+El extractor separa la validación de la envoltura API de la validación
+preliminar de registros. Comprueba que cada elemento sea un objeto JSON,
+registra campos inventariados ausentes o nulos, tipos inesperados y campos
+desconocidos, y señala explícitamente cuándo aparece solo uno de `object` y
+`name`. También informa de colisiones candidatas de `id` y `code`; no elimina
+ni deduplica registros.
 
-1. **Respuesta y paginación:** verificar JSON válido, envoltura documentada,
-   tipos de metadatos, lista `items`, límite solicitado y coherencia entre el
-   número de elementos y los totales declarados. Confirmar primero las reglas
-   oficiales para páginas vacías, última página y sus totales antes de
-   convertir cualquier discrepancia en error.
-2. **Campos y tipos:** registrar campos presentes, ausentes y desconocidos;
-   tipos observados y tipos incompatibles con la especificación. No rechazar
-   campos nuevos sin una política de evolución del esquema.
-3. **Nulos y vacíos:** medir por campo las ausencias, los valores `null` y los
-   textos vacíos por separado. No tratarlos como inválidos sin confirmar
-   obligatoriedad y nulabilidad.
-4. **Fechas:** comprobar el formato documentado de las fechas de publicación y
-   de la fecha límite, distinguiendo una fecha de un instante con zona horaria.
-   No inferir reglas sobre plazos ni secuencias de publicación.
-5. **Relaciones:** inspeccionar la forma y resolución de los enlaces entre
-   avisos y contratos, y las referencias a entidad, autoridad, tipo y estado.
-   No asumir cardinalidad, integridad total ni una secuencia de fases.
-6. **Identidad:** reportar posibles colisiones de `id`, `code` y enlaces, sin
-   deduplicar automáticamente.
-7. **Evolución:** conservar los datos de cada ejecución por separado y comparar
-   esquemas entre ejecuciones sin sobrescribir muestras anteriores ante
-   respuestas inválidas.
+Los tipos inesperados, las ausencias, los nulos, los campos desconocidos y la
+discrepancia `object`/`name` son advertencias porque la evidencia disponible no
+confirma obligatoriedad ni estabilidad completa del esquema. Son errores
+bloqueantes los registros que no sean objetos JSON y las fechas de publicación
+que no sean texto o no cumplan el patrón documentado `AAAA-MM-DD`. Las
+ejecuciones con errores no se guardan y no sustituyen muestras anteriores. La
+fecha límite y las fechas de apertura solo reciben comprobación de tipo; no se
+impone un formato exacto que el inventario no confirma.
 
-Estas son comprobaciones propuestas, no validaciones semánticas ya
-implementadas ni reglas oficiales adicionales.
+Esta validación es preliminar, no semántica ni completa. Quedan pendientes:
+
+1. **Paginación:** ampliar la revisión de coherencia entre páginas, totales,
+   páginas vacías y última página cuando sus reglas estén confirmadas.
+2. **Fechas:** confirmar formato, zona horaria y valores ausentes para la fecha
+   límite y las fechas de apertura.
+3. **Relaciones:** inspeccionar la resolución de enlaces entre avisos y
+   contratos y las referencias a entidad, autoridad, tipo y estado, sin asumir
+   cardinalidad ni secuencia de fases.
+4. **Identidad:** verificar el alcance y estabilidad de `id`, `code` y enlaces
+   antes de proponer una clave o deduplicación.
+5. **Evolución:** comparar esquemas entre ejecuciones y revisar advertencias
+   antes de convertirlas en errores.
+
+No se han añadido reglas de negocio ni requisitos de campos obligatorios.
 
 ## Métricas candidatas y límites
 

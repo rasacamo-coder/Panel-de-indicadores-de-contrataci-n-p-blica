@@ -39,9 +39,9 @@ Desde la raíz del repositorio, ejecutar las pruebas offline:
 python -m unittest discover -s radar\tests -v
 ```
 
-Los registros empleados por las pruebas son sintéticos y solo comprueban la
-estructura de respuesta. No representan anuncios reales ni resultados del
-conjunto.
+Los registros empleados por las pruebas son sintéticos y están identificados
+como tales en los propios casos. No representan anuncios reales ni resultados
+del conjunto.
 
 Para descargar una muestra pequeña, proporciona un intervalo fijo de fechas de
 publicación:
@@ -56,10 +56,34 @@ El programa comprueba por separado:
 1. Que el servidor devuelve JSON y que la envoltura incluye los campos de
    paginación esperados y una lista `items` que respeta el límite pedido.
 2. Que cada elemento de `items` es un objeto JSON.
+3. Que los registros cumplen un tipado preliminar basado en
+   [el inventario de esquema](docs/schema-inventory.md).
 
-Estas comprobaciones no validan los campos, tipos o significado de cada aviso.
-El esquema y las reglas de negocio no se dan por supuestos: se documentarán
-cuando se contrasten con la especificación oficial de los registros.
+La validación preliminar distingue errores bloqueantes y advertencias:
+
+- Un elemento que no sea un objeto JSON, una fecha de publicación con tipo
+  distinto de texto o una fecha de publicación que no respete `AAAA-MM-DD`
+  impide guardar la nueva ejecución. Las ejecuciones anteriores permanecen
+  intactas.
+- Los campos ausentes o nulos, los tipos inesperados, los campos desconocidos y
+  la discrepancia `object`/`name` se registran como advertencias. No se declaran
+  campos obligatorios, no se renombran campos y las advertencias no impiden
+  guardar la respuesta.
+- Las posibles colisiones de `id` o `code` se informan para revisión. No se
+  eliminan registros ni se define una clave única.
+- El manifiesto de cada ejecución incluye el estado de validación y el detalle
+  de advertencias. Los errores bloqueantes se informan al usuario y no generan
+  una nueva ejecución guardada. El mensaje de consola informa del número de
+  advertencias.
+
+Esta comprobación es estructural y de tipado preliminar, no una validación de
+dominio completa. Los tipos de varios campos se apoyan en la única fila
+inspeccionada y podrían cambiar en la fuente; por eso un tipo inesperado es una
+advertencia, no un error bloqueante. Solo se valida el formato de las fechas de
+primera y última publicación, cuyo patrón `AAAA-MM-DD` está documentado. Para
+`deadlineDate` y `openingDates` se comprueba el tipo observado, pero no se
+impone un formato de fecha aún no suficientemente confirmado. No se aplican
+reglas de negocio ni se interpreta un aviso como contrato adjudicado.
 
 Una respuesta correcta con cero elementos se guarda como una ejecución con
 `result_status: "empty"` y el comando termina con un mensaje informativo. No es
@@ -85,8 +109,8 @@ respuestas brutas en esta fase.
 
 ## Limitaciones actuales
 
-- Aún no se han documentado los significados, tipos, ausencias o claves de
-  negocio de los campos de los registros.
+- El inventario de esquema y el tipado son preliminares; obligatoriedad,
+  nulabilidad, semántica completa y reglas de negocio siguen sin confirmarse.
 - No hay limpieza, validación de calidad del dominio, análisis ni dashboard.
 - La petición de muestra no garantiza por sí sola que el endpoint represente
   exactamente el dataset anual de la ficha.

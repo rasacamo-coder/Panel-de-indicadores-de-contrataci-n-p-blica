@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import socket
 import tempfile
@@ -33,15 +34,112 @@ class SampleExtractionError(Exception):
 
 
 @dataclass(frozen=True)
+class ValidationIssue:
+    """Hallazgo preliminar asociado a un registro."""
+
+    code: str
+    message: str
+    record_index: int | None = None
+    field: str | None = None
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "code": self.code,
+            "message": self.message,
+            "record_index": self.record_index,
+            "field": self.field,
+        }
+
+
+@dataclass(frozen=True)
+class RecordValidationReport:
+    """Errores bloqueantes y advertencias no bloqueantes de los registros."""
+
+    errors: list[ValidationIssue]
+    warnings: list[ValidationIssue]
+
+    @property
+    def is_valid(self) -> bool:
+        return not self.errors
+
+    @property
+    def status(self) -> str:
+        if self.errors:
+            return "failed"
+        if self.warnings:
+            return "passed_with_warnings"
+        return "passed"
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "status": self.status,
+            "errors": [issue.as_dict() for issue in self.errors],
+            "warnings": [issue.as_dict() for issue in self.warnings],
+        }
+
+
+class RecordValidationError(SampleExtractionError):
+    """La validación preliminar encontró errores que impiden guardar."""
+
+    def __init__(self, report: RecordValidationReport):
+        self.report = report
+        details = "\n".join(
+            f"- {self._format_issue(issue)}" for issue in report.errors
+        )
+        super().__init__(
+            "La validación preliminar encontró "
+            f"{len(report.errors)} error(es); no se guardó la muestra:\n"
+            f"{details}"
+        )
+
+    @staticmethod
+    def _format_issue(issue: ValidationIssue) -> str:
+        location = []
+        if issue.record_index is not None:
+            location.append(f"registro {issue.record_index}")
+        if issue.field is not None:
+            location.append(f"campo '{issue.field}'")
+        prefix = ", ".join(location) or "respuesta"
+        return f"{prefix} [{issue.code}]: {issue.message}"
+
+
+@dataclass(frozen=True)
 class SampleResult:
     """Resultado guardado de una consulta, que puede estar vacía."""
 
     output_dir: Path
     returned_rows: int
+    validation_warnings: int = 0
 
     @property
     def is_empty(self) -> bool:
         return self.returned_rows == 0
+
+
+RECORD_FIELD_TYPES: dict[str, str] = {
+    "_links": "object",
+    "budgetWithoutVAT": "number",
+    "code": "string",
+    "contractProcedureStatus": "object",
+    "contractProcedureType": "object",
+    "contractType": "object",
+    "contractingAuthority": "object",
+    "deadlineDate": "string",
+    "entity": "object",
+    "financedEuropeanFunds": "boolean",
+    "firstPublicationDate": "date",
+    "id": "number",
+    "lastPublicationDate": "date",
+    "mainEntityOfPage": "string",
+    "minorContract": "boolean",
+    "name": "string",
+    "numberBidders": "number",
+    "object": "string",
+    "openingDates": "string_list",
+    "recoveryPlan": "boolean",
+    "sara": "boolean",
+    "subjectAppeal": "boolean",
+}
 
 
 def build_request_url(
@@ -123,13 +221,190 @@ def validate_api_envelope(payload: object, limit: int) -> dict[str, Any]:
     return payload
 
 
-def validate_record_objects(items: list[object]) -> None:
-    """Comprueba solo que cada resultado sea un objeto JSON."""
-    if not all(isinstance(item, dict) for item in items):
-        raise SampleExtractionError(
-            "La respuesta de la API contiene un resultado que no es un "
-            "objeto JSON."
+def validate_record_objects(items: list[object]) -> list[dict[str, Any]]:
+    """Valida y devuelve registros JSON, identificando el índice inválido."""
+    records: list[dict[str, Any]] = []
+    for record_index, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            raise SampleExtractionError(
+                f"El registro {record_index} de la respuesta no es un "
+                "objeto JSON."
+            )
+        records.append(item)
+    return records
+
+
+def _matches_record_type(value: object, expected_type: str) -> bool:
+    if expected_type == "object":
+        return isinstance(value, dict)
+    if expected_type == "number":
+        return type(value) in (int, float)
+    if expected_type == "boolean":
+        return type(value) is bool
+    if expected_type == "string":
+        return isinstance(value, str)
+    if expected_type == "string_list":
+        return isinstance(value, list) and all(
+            isinstance(item, str) for item in value
         )
+    if expected_type == "date":
+        return isinstance(value, str)
+    return False
+
+
+def _is_documented_iso_date(value: str) -> bool:
+    return bool(re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", value)) and (
+        _valid_calendar_date(value)
+    )
+
+
+def _valid_calendar_date(value: str) -> bool:
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
+def validate_records(
+    items: list[dict[str, Any]],
+) -> RecordValidationReport:
+    """Valida tipos preliminares, fechas documentadas y anomalías investigables."""
+    errors: list[ValidationIssue] = []
+    warnings: list[ValidationIssue] = []
+
+    observed_values: dict[str, dict[object, list[int]]] = {
+        "id": {},
+        "code": {},
+    }
+
+    for record_index, item in enumerate(items, start=1):
+        for field in RECORD_FIELD_TYPES.keys() - item.keys():
+            warnings.append(
+                ValidationIssue(
+                    code="field_missing",
+                    message=(
+                        "El campo inventariado no aparece en este registro; "
+                        "su obligatoriedad no está confirmada."
+                    ),
+                    record_index=record_index,
+                    field=field,
+                )
+            )
+
+        for field, value in item.items():
+            expected_type = RECORD_FIELD_TYPES.get(field)
+            if expected_type is None:
+                warnings.append(
+                    ValidationIssue(
+                        code="unknown_field",
+                        message=(
+                            "El campo no figura en el inventario preliminar."
+                        ),
+                        record_index=record_index,
+                        field=field,
+                    )
+                )
+                continue
+
+            if value is None:
+                warnings.append(
+                    ValidationIssue(
+                        code="field_null",
+                        message=(
+                            "El campo contiene null; su nulabilidad no está "
+                            "confirmada."
+                        ),
+                        record_index=record_index,
+                        field=field,
+                    )
+                )
+                continue
+
+            if expected_type == "date" and not isinstance(value, str):
+                errors.append(
+                    ValidationIssue(
+                        code="unexpected_documented_type",
+                        message=(
+                            "La fecha de publicación documentada debe ser "
+                            "texto con formato AAAA-MM-DD."
+                        ),
+                        record_index=record_index,
+                        field=field,
+                    )
+                )
+                continue
+
+            if not _matches_record_type(value, expected_type):
+                warnings.append(
+                    ValidationIssue(
+                        code="unexpected_type",
+                        message=(
+                            "El tipo no coincide con el tipo preliminar "
+                            "documentado u observado."
+                        ),
+                        record_index=record_index,
+                        field=field,
+                    )
+                )
+                continue
+
+            if expected_type == "date" and not _is_documented_iso_date(value):
+                errors.append(
+                    ValidationIssue(
+                        code="invalid_date_format",
+                        message=(
+                            "La fecha debe respetar el formato documentado "
+                            "AAAA-MM-DD y ser una fecha válida."
+                        ),
+                        record_index=record_index,
+                        field=field,
+                    )
+                )
+
+            if field in observed_values and type(value) in (int, float, str):
+                observed_values[field].setdefault(value, []).append(record_index)
+
+        if ("object" in item) != ("name" in item):
+            warnings.append(
+                ValidationIssue(
+                    code="object_name_discrepancy",
+                    message=(
+                        "Solo aparece uno de los campos object y name; no se "
+                        "asumen equivalentes ni se renombran."
+                    ),
+                    record_index=record_index,
+                    field="object/name",
+                )
+            )
+
+    for field, values in observed_values.items():
+        for indexes in values.values():
+            if len(indexes) > 1:
+                warnings.append(
+                    ValidationIssue(
+                        code="possible_identifier_collision",
+                        message=(
+                            "El mismo valor aparece en varios registros; "
+                            "es una colisión candidata, no una deduplicación."
+                        ),
+                        field=field,
+                    )
+                )
+                for record_index in indexes:
+                    warnings.append(
+                        ValidationIssue(
+                            code="possible_identifier_collision_record",
+                            message=(
+                                "Este registro participa en una colisión "
+                                "candidata que requiere revisión."
+                            ),
+                            record_index=record_index,
+                            field=field,
+                        )
+                    )
+
+    return RecordValidationReport(errors=errors, warnings=warnings)
 
 
 def _request_body(request: Request) -> bytes:
@@ -177,7 +452,9 @@ def _request_body(request: Request) -> bytes:
         ) from error
 
 
-def _parse_api_response(response_body: bytes, limit: int) -> dict[str, Any]:
+def _parse_api_response(
+    response_body: bytes, limit: int
+) -> tuple[dict[str, Any], RecordValidationReport]:
     try:
         payload = json.loads(response_body)
     except (json.JSONDecodeError, UnicodeDecodeError) as error:
@@ -186,8 +463,11 @@ def _parse_api_response(response_body: bytes, limit: int) -> dict[str, Any]:
         ) from error
 
     envelope = validate_api_envelope(payload, limit)
-    validate_record_objects(envelope["items"])
-    return envelope
+    records = validate_record_objects(envelope["items"])
+    report = validate_records(records)
+    if not report.is_valid:
+        raise RecordValidationError(report)
+    return envelope, report
 
 
 def _save_sample(
@@ -198,6 +478,7 @@ def _save_sample(
     publication_date_lt: date,
     limit: int,
     output_dir: Path | None,
+    validation_report: RecordValidationReport,
 ) -> SampleResult:
     target_root = (
         output_dir
@@ -236,7 +517,8 @@ def _save_sample(
         "result_status": result_status,
         "envelope_validation": "passed",
         "record_object_validation": "passed",
-        "domain_schema_validation": "not performed",
+        "domain_schema_validation": validation_report.status,
+        "record_validation": validation_report.as_dict(),
         "pipeline_version": "0.1.0",
     }
 
@@ -265,7 +547,11 @@ def _save_sample(
             "Comprueba los permisos y el espacio disponible."
         ) from error
 
-    return SampleResult(output_dir=run_dir, returned_rows=len(items))
+    return SampleResult(
+        output_dir=run_dir,
+        returned_rows=len(items),
+        validation_warnings=len(validation_report.warnings),
+    )
 
 
 def download_sample(
@@ -290,7 +576,7 @@ def download_sample(
         },
     )
     response_body = _request_body(request)
-    payload = _parse_api_response(response_body, limit)
+    payload, validation_report = _parse_api_response(response_body, limit)
     return _save_sample(
         response_body=response_body,
         payload=payload,
@@ -299,6 +585,7 @@ def download_sample(
         publication_date_lt=publication_date_lt,
         limit=limit,
         output_dir=output_dir,
+        validation_report=validation_report,
     )
 
 
@@ -352,7 +639,8 @@ def main() -> None:
     else:
         print(
             f"Muestra validada guardada en: {result.output_dir} "
-            f"({result.returned_rows} registros)"
+            f"({result.returned_rows} registros; "
+            f"{result.validation_warnings} advertencias preliminares)"
         )
 
 

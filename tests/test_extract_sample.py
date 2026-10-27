@@ -18,6 +18,7 @@ from radar.extract_sample import (
     main,
     validate_api_envelope,
     validate_record_objects,
+    validate_records,
 )
 
 
@@ -50,6 +51,33 @@ def synthetic_response_body(items):
         "items": items,
     }
     return json.dumps(payload).encode("utf-8")
+
+
+def valid_synthetic_record():
+    return {
+        "_links": {},
+        "budgetWithoutVAT": 123.45,
+        "code": "SYNTHETIC-CODE",
+        "contractProcedureStatus": {},
+        "contractProcedureType": {},
+        "contractType": {},
+        "contractingAuthority": {},
+        "deadlineDate": "synthetic-date-time-format-not-validated",
+        "entity": {},
+        "financedEuropeanFunds": False,
+        "firstPublicationDate": "2026-10-20",
+        "id": 123,
+        "lastPublicationDate": "2026-10-21",
+        "mainEntityOfPage": "https://example.invalid/synthetic",
+        "minorContract": False,
+        "name": "Synthetic subject",
+        "numberBidders": 2,
+        "object": "Synthetic object",
+        "openingDates": ["synthetic-opening-date"],
+        "recoveryPlan": False,
+        "sara": True,
+        "subjectAppeal": False,
+    }
 
 
 def download_with_response(body, output_dir, content_type="application/json"):
@@ -180,9 +208,89 @@ class ResponseValidationTests(unittest.TestCase):
     def test_record_container_validation_does_not_invent_domain_fields(self):
         validate_record_objects([{}, {"another_unknown_field": 1}])
 
-        with self.assertRaisesRegex(SampleExtractionError, "objeto JSON"):
-            validate_record_objects([{"synthetic": True}, None])
+        secret_marker = "SYNTHETIC_PRIVATE_SENTINEL"
+        with self.assertRaisesRegex(
+            SampleExtractionError, "registro 2.*objeto JSON"
+        ) as error_context:
+            validate_record_objects([{"synthetic": True}, secret_marker])
 
+        self.assertNotIn(secret_marker, str(error_context.exception))
+
+    def test_preliminary_record_validator_accepts_synthetic_documented_types(self):
+        report = validate_records([valid_synthetic_record()])
+
+        self.assertTrue(report.is_valid)
+        self.assertEqual(report.errors, [])
+        self.assertEqual(report.warnings, [])
+        self.assertEqual(report.status, "passed")
+
+    def test_preliminary_type_mismatch_is_a_warning_not_a_blocking_error(self):
+        report = validate_records([{"id": "synthetic-wrong-type"}])
+
+        self.assertTrue(report.is_valid)
+        self.assertIn("unexpected_type", {issue.code for issue in report.warnings})
+        self.assertEqual(report.errors, [])
+        self.assertEqual(report.status, "passed_with_warnings")
+
+    def test_missing_null_unknown_and_object_name_discrepancy_are_warnings(self):
+        report = validate_records(
+            [
+                {
+                    "object": "synthetic object",
+                    "id": None,
+                    "futureSyntheticField": "not real data",
+                }
+            ]
+        )
+        warning_codes = {issue.code for issue in report.warnings}
+
+        self.assertTrue(report.is_valid)
+        self.assertIn("field_missing", warning_codes)
+        self.assertIn("field_null", warning_codes)
+        self.assertIn("unknown_field", warning_codes)
+        self.assertIn("object_name_discrepancy", warning_codes)
+        self.assertEqual(report.errors, [])
+
+    def test_invalid_documented_publication_date_is_a_blocking_error(self):
+        record = valid_synthetic_record()
+        record["firstPublicationDate"] = "2026-02-30"
+
+        report = validate_records([record])
+
+        self.assertFalse(report.is_valid)
+        self.assertEqual(report.status, "failed")
+        self.assertIn(
+            "invalid_date_format", {issue.code for issue in report.errors}
+        )
+
+    def test_non_text_documented_publication_date_is_a_blocking_error(self):
+        record = valid_synthetic_record()
+        record["lastPublicationDate"] = 20261021
+
+        report = validate_records([record])
+
+        self.assertFalse(report.is_valid)
+        self.assertIn(
+            "unexpected_documented_type",
+            {issue.code for issue in report.errors},
+        )
+
+    def test_candidate_identifier_collisions_are_reported_not_removed(self):
+        first = valid_synthetic_record()
+        second = valid_synthetic_record()
+
+        report = validate_records([first, second])
+
+        collision_issues = [
+            issue
+            for issue in report.warnings
+            if issue.code == "possible_identifier_collision_record"
+        ]
+        self.assertEqual(len(collision_issues), 4)
+        self.assertEqual(
+            {issue.record_index for issue in collision_issues}, {1, 2}
+        )
+        self.assertEqual(report.errors, [])
 
 class DownloadSampleTests(unittest.TestCase):
     def test_saves_valid_nonempty_response_and_manifest(self):
@@ -205,8 +313,118 @@ class DownloadSampleTests(unittest.TestCase):
                 manifest["record_object_validation"], "passed"
             )
             self.assertEqual(
-                manifest["domain_schema_validation"], "not performed"
+                manifest["domain_schema_validation"],
+                "passed_with_warnings",
             )
+            self.assertEqual(
+                manifest["record_validation"]["status"],
+                "passed_with_warnings",
+            )
+            self.assertGreater(
+                len(manifest["record_validation"]["warnings"]), 0
+            )
+
+    def test_invalid_record_does_not_save_or_replace_prior_run(self):
+        valid_body = synthetic_response_body([valid_synthetic_record()])
+        secret_marker = "SYNTHETIC_PRIVATE_SENTINEL"
+        invalid_body = synthetic_response_body(
+            [valid_synthetic_record(), secret_marker]
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir)
+            prior_result = download_with_response(valid_body, output_dir)
+            prior_response = (prior_result.output_dir / "response.json").read_bytes()
+
+            with patch(
+                "radar.extract_sample.urlopen",
+                return_value=FakeResponse(invalid_body),
+            ):
+                with self.assertRaisesRegex(
+                    SampleExtractionError,
+                    "registro 2.*objeto JSON",
+                ) as error_context:
+                    download_sample(
+                        date(2026, 10, 20),
+                        date(2026, 10, 27),
+                        limit=2,
+                        output_dir=output_dir,
+                    )
+
+            self.assertNotIn(secret_marker, str(error_context.exception))
+            self.assertEqual(
+                (prior_result.output_dir / "response.json").read_bytes(),
+                prior_response,
+            )
+            self.assertEqual(list(output_dir.iterdir()), [prior_result.output_dir])
+
+    def test_cli_reports_validation_field_and_error_without_record_values(self):
+        record = valid_synthetic_record()
+        record["firstPublicationDate"] = "SYNTHETIC_INVALID_DATE"
+        body = synthetic_response_body([record])
+        error_output = io.StringIO()
+
+        with patch(
+            "radar.extract_sample.urlopen",
+            return_value=FakeResponse(body),
+        ):
+            with patch.object(
+                sys,
+                "argv",
+                [
+                    "extract_sample.py",
+                    "--publication-date-gt",
+                    "2026-10-20",
+                    "--publication-date-lt",
+                    "2026-10-27",
+                ],
+            ):
+                with redirect_stderr(error_output):
+                    with self.assertRaises(SystemExit) as exit_context:
+                        main()
+
+        message = error_output.getvalue()
+        self.assertEqual(exit_context.exception.code, 1)
+        self.assertIn("registro 1", message)
+        self.assertIn("campo 'firstPublicationDate'", message)
+        self.assertIn("invalid_date_format", message)
+        self.assertIn("no se guardó la muestra", message)
+        self.assertNotIn("SYNTHETIC_INVALID_DATE", message)
+        self.assertNotIn("SYNTHETIC-CODE", message)
+        self.assertNotIn("Traceback", message)
+
+    def test_cli_reports_non_object_record_index_without_revealing_value(self):
+        secret_marker = "SYNTHETIC_PRIVATE_SENTINEL"
+        body = synthetic_response_body(
+            [valid_synthetic_record(), secret_marker]
+        )
+        error_output = io.StringIO()
+
+        with patch(
+            "radar.extract_sample.urlopen",
+            return_value=FakeResponse(body),
+        ):
+            with patch.object(
+                sys,
+                "argv",
+                [
+                    "extract_sample.py",
+                    "--publication-date-gt",
+                    "2026-10-20",
+                    "--publication-date-lt",
+                    "2026-10-27",
+                ],
+            ):
+                with redirect_stderr(error_output):
+                    with self.assertRaises(SystemExit) as exit_context:
+                        main()
+
+        message = error_output.getvalue()
+        self.assertEqual(exit_context.exception.code, 1)
+        self.assertIn("registro 2", message)
+        self.assertIn("objeto JSON", message)
+        self.assertNotIn(secret_marker, message)
+        self.assertNotIn("Traceback", message)
 
     def test_valid_empty_response_is_saved_without_replacing_prior_run(self):
         valid_body = synthetic_response_body([{"id": "synthetic-test-only"}])
