@@ -51,19 +51,30 @@ python -m radar.extract_sample --publication-date-gt 2026-10-20 --publication-da
 ```
 
 Los límites `.gt` y `.lt` son los nombres de filtro documentados por la API.
-El programa valida que la respuesta tenga una envoltura JSON reconocible y al
-menos un elemento. Si no se reciben registros o la respuesta no es válida, el
-programa falla explícitamente y no crea una ejecución vacía. Una muestra puede
-quedar vacía para un intervalo sin avisos; en ese caso elige un intervalo
-distinto después de consultar la documentación, sin ampliar automáticamente la
-consulta.
+El programa comprueba por separado:
 
-Cada ejecución válida se guarda en una carpeta nueva bajo
+1. Que el servidor devuelve JSON y que la envoltura incluye los campos de
+   paginación esperados y una lista `items` que respeta el límite pedido.
+2. Que cada elemento de `items` es un objeto JSON.
+
+Estas comprobaciones no validan los campos, tipos o significado de cada aviso.
+El esquema y las reglas de negocio no se dan por supuestos: se documentarán
+cuando se contrasten con la especificación oficial de los registros.
+
+Una respuesta correcta con cero elementos se guarda como una ejecución con
+`result_status: "empty"` y el comando termina con un mensaje informativo. No es
+un error de red ni una respuesta inválida, pero tampoco aporta filas para
+análisis. Se guarda en una carpeta nueva; las ejecuciones anteriores no se
+eliminan ni se sobrescriben. Los errores HTTP, de conexión, timeout, tipo de
+contenido, JSON o almacenamiento se muestran como mensajes breves y terminan
+con código distinto de cero, sin presentar una traza al usuario.
+
+Cada respuesta de API válida se guarda en una carpeta nueva bajo
 `radar\data\raw\`. Contiene la respuesta descargada y un manifiesto con la URL,
-los filtros, la hora UTC, el número de elementos y el estado de las
-comprobaciones de estructura. Las carpetas de datos brutos están excluidas de
-Git. No se imprimen los registros en consola y las ejecuciones anteriores no
-se sobrescriben.
+los filtros, la hora UTC, el número de elementos, si la muestra está vacía y el
+resultado de las comprobaciones estructurales. Las carpetas de datos brutos
+están excluidas de Git. No se imprimen los registros en consola y las
+ejecuciones anteriores no se sobrescriben.
 
 Una consulta limitada por fechas es repetible como solicitud, pero no garantiza
 que el servidor devuelva exactamente los mismos registros en el futuro: la
