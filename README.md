@@ -54,6 +54,52 @@ irregular, cambios respecto a la ejecución válida anterior y SHA-256. Una
 coincidencia de hash indica una instantánea idéntica byte a byte; no demuestra
 que no haya anuncios nuevos ni se usa para deduplicar filas.
 
+## Dashboard agregado
+
+Después de contar con una captura local válida, genera el JSON público agregado
+desde la raíz del repositorio:
+
+```powershell
+python -m radar.build_dashboard_data
+```
+
+El proceso selecciona la captura válida más reciente, verifica el hash y el
+número de registros frente al manifiesto y escribe
+`site/data/radar-summary.json`. No descarga datos. El resumen contiene conteos,
+series por fecha, métricas de completitud y agregados por órgano; no copia
+registros individuales, títulos, URLs de expedientes ni el JSON bruto.
+`site/` es el artefacto público, por lo que este fichero debe revisarse como
+contenido publicable antes de cualquier despliegue.
+
+El dashboard usa solo HTML, CSS y JavaScript nativos. Desde la raíz, sirve la
+carpeta pública localmente para permitir que el navegador lea el JSON:
+
+```powershell
+python -m http.server 8000 --directory site
+```
+
+Abre `http://localhost:8000/` para el CV o
+`http://localhost:8000/radar.html` para el dashboard. Abrir la página como
+`file://` no permite cargar de forma fiable el JSON por las restricciones del
+navegador.
+
+Los campos usados por el agregador (`contratacion_fecha_de_publicacion_documento`,
+`contratacion_organo_contratacion` y
+`contratacion_fecha_limite_presentacion`) se observaron en una captura y no
+constituyen un esquema garantizado por el proveedor. Las fechas se interpretan
+solo con los formatos observados `%d/%m/%Y` y `%d/%m/%Y %H:%M`.
+`lastPublicationDate` no se usa como fecha de publicación del catálogo. Los
+plazos anteriores al día de actualización RDF se señalan como casos posibles
+para revisar, no como errores confirmados. Un indicador cuyo campo no exista
+se presenta como no disponible.
+
+La agregación es determinista para una captura, una versión de código y una
+fecha de generación fija; el metadato `generated_at_utc` cambia al regenerar.
+El ranking usa el texto observado del órgano y no unifica variantes. La ventana
+de 90 días no es un histórico completo; no se calculan importes adjudicados ni
+se interpreta cada anuncio como un contrato adjudicado. Se mantiene la
+atribución de Open Data Euskadi y CC BY 4.0 descrita arriba.
+
 El esquema del catálogo es preliminar: se observó en una captura una lista de
 objetos y campos cuyos valores eran texto, pero la ficha no documenta un
 diccionario completo ni la obligatoriedad, semántica, unicidad o estabilidad de
