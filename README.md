@@ -54,6 +54,39 @@ irregular, cambios respecto a la ejecución válida anterior y SHA-256. Una
 coincidencia de hash indica una instantánea idéntica byte a byte; no demuestra
 que no haya anuncios nuevos ni se usa para deduplicar filas.
 
+La ingesta manual conserva capturas con metadatos no verificables para permitir
+su inspección local. El flujo de publicación automática es más estricto: no
+publica si faltan metadatos RDF, si la fecha de la fuente está en el futuro o
+tiene más de tres días, si la captura está vacía, si faltan los campos del
+dashboard o si hay fechas no vacías con formatos no reconocidos. El requisito
+de tres días es una política del proyecto sobre la fecha RDF, nunca la fecha de
+descarga. La falta de valores se informa como advertencia y se muestra en las
+métricas de completitud.
+
+No se fija un umbral arbitrario de volumen para la ventana móvil: cero registros
+bloquea la publicación y cualquier variación respecto al resumen publicado se
+advierte para revisión. La estructura de resumen se valida con claves y tipos
+esperados para impedir que se publiquen registros individuales por error.
+Las dos únicas capturas comparables disponibles localmente tienen el mismo
+recuento y hash y corresponden al mismo día; no aportan una serie temporal que
+permita justificar un umbral estadístico para las variaciones normales. Por
+ello el aviso de variación es deliberadamente no bloqueante.
+
+El workflow de datos tiene `contents: write` porque confirma únicamente
+`site/data/radar-summary.json` si el agregado cambia. No necesita secretos ni
+servicios de Azure. Para investigar un fallo, revisa el primer paso fallido en
+Actions; los mensajes describen la clase de validación sin imprimir datos
+brutos.
+
+El workflow de Azure conserva `push`/pull request a `main` y escucha también
+`workflow_run` de `Update Radar data` al completarse en `main`. El despliegue
+por esta vía exige conclusión exitosa y que la rama y el repositorio de origen
+sean los esperados; hace checkout explícito de la versión más reciente de la
+rama predeterminada. Así se integra el commit con `GITHUB_TOKEN`, que por sí
+mismo no dispara workflows adicionales, sin añadir credenciales. La
+incorporación de ambos workflows a la rama predeterminada sigue requiriendo
+revisión y autorización.
+
 ## Dashboard agregado
 
 Después de contar con una captura local válida, genera el JSON público agregado
@@ -70,6 +103,22 @@ series por fecha, métricas de completitud y agregados por órgano; no copia
 registros individuales, títulos, URLs de expedientes ni el JSON bruto.
 `site/` es el artefacto público, por lo que este fichero debe revisarse como
 contenido publicable antes de cualquier despliegue.
+
+El workflow `.github/workflows/update-radar-data.yml` automatiza la operación.
+Prepara descargas y el JSON en `.radar-work/` (ignorado por Git), ejecuta toda
+la suite y solo después instala atómicamente el resumen. No añade datos brutos,
+código Python ni pruebas al sitio. Si el hash de la captura y la fecha
+publicada por la fuente no han cambiado, conserva el JSON actual para evitar
+commits vacíos.
+
+Se ejecuta diariamente a las 04:23 UTC y admite `workflow_dispatch` desde la
+pestaña Actions. GitHub solo ejecuta las programaciones definidas en la rama
+predeterminada. El job tiene `contents: write` únicamente porque puede
+confirmar el resumen; añade explícitamente solo
+`site/data/radar-summary.json`. No requiere secretos ni servicios de Azure.
+Para investigar un fallo, abre el job en Actions y revisa el primer paso con
+error: la salida describe la clase de validación sin imprimir registros ni
+credenciales.
 
 El dashboard usa solo HTML, CSS y JavaScript nativos. Desde la raíz, sirve la
 carpeta pública localmente para permitir que el navegador lea el JSON:
