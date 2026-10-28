@@ -12,6 +12,8 @@ PUBLIC_SITE_FILES = {
     "radar.html",
     "radar.css",
     "radar.js",
+    "proyectos.html",
+    "projects.css",
     "data/radar-summary.json",
 }
 
@@ -36,13 +38,25 @@ class StaticSitePublicationTests(unittest.TestCase):
         self.assertIn('href="styles.css"', html)
         self.assertTrue((SITE_DIRECTORY / "styles.css").is_file())
 
-    def test_cv_links_to_radar_and_dashboard_assets_exist(self):
+    def test_main_pages_link_to_projects_and_dashboard_assets_exist(self):
         html = (SITE_DIRECTORY / "index.html").read_text(encoding="utf-8")
-        self.assertIn('href="radar.html"', html)
+        self.assertIn('href="proyectos.html"', html)
+        projects = (SITE_DIRECTORY / "proyectos.html").read_text(encoding="utf-8")
+        self.assertIn('href="radar.html"', projects)
+        self.assertIn('href="projects.css"', projects)
+        self.assertTrue((SITE_DIRECTORY / "projects.css").is_file())
         dashboard = (SITE_DIRECTORY / "radar.html").read_text(encoding="utf-8")
         self.assertIn('href="radar.css"', dashboard)
         self.assertIn('src="radar.js"', dashboard)
         self.assertTrue((SITE_DIRECTORY / "data" / "radar-summary.json").is_file())
+
+    def test_main_navigation_is_consistent_across_public_pages(self):
+        labels = ("Perfil", "Experiencia", "Formación", "Competencias", "Proyectos")
+        for page_name in ("index.html", "proyectos.html", "radar.html"):
+            with self.subTest(page=page_name):
+                html = (SITE_DIRECTORY / page_name).read_text(encoding="utf-8")
+                for label in labels:
+                    self.assertIn(f">{label}</a>", html)
 
 
 if __name__ == "__main__":

@@ -83,9 +83,10 @@ El workflow de Azure conserva `push`/pull request a `main` y escucha también
 por esta vía exige conclusión exitosa y que la rama y el repositorio de origen
 sean los esperados; hace checkout explícito de la versión más reciente de la
 rama predeterminada. Así se integra el commit con `GITHUB_TOKEN`, que por sí
-mismo no dispara workflows adicionales, sin añadir credenciales. La
-incorporación de ambos workflows a la rama predeterminada sigue requiriendo
-revisión y autorización.
+mismo no dispara workflows adicionales, sin añadir credenciales. Los workflows
+están versionados en la rama predeterminada; su ejecución real y el resultado
+de `workflow_run` deben comprobarse en GitHub Actions antes de declarar
+verificada la actualización de extremo a extremo.
 
 ## Dashboard agregado
 
@@ -260,8 +261,17 @@ respuestas brutas en esta fase.
 - La ventana del catálogo es móvil y no representa por sí sola un archivo
   histórico completo. Los mapeos entre el JSON del catálogo y la API no están
   confirmados.
-- No hay limpieza, validación de calidad del dominio, análisis ni dashboard.
+- La extracción de muestra de la API no alimenta el dashboard del catálogo.
+  El dashboard agrega únicamente los campos observados y documentados en la
+  sección correspondiente; no realiza validación semántica exhaustiva.
 - La petición de muestra no garantiza por sí sola que el endpoint represente
   exactamente el dataset anual de la ficha.
 - La web pública se publica desde `site/`; el código, pruebas y datos de
   `radar/` permanecen fuera del artefacto Static Web Apps.
+
+## Documentación para continuar
+
+- [Arquitectura y flujo de datos](../docs/radar/arquitectura.md)
+- [Guía de estudio](../docs/radar/guia-de-estudio.md)
+- [Storytelling y límites](../docs/radar/storytelling.md)
+- [Auditoría del CV y catálogo](../docs/auditoria-cv.md)
