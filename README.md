@@ -1,15 +1,16 @@
-# Muestra local del Radar de Contratación Pública de Euskadi
+# Radar de Contratación Pública de Euskadi
 
-Este paquete obtiene una página pequeña del endpoint oficial de avisos de
-contratación. No transforma los registros ni presupone que los campos de una
-respuesta sean suficientes para calcular métricas.
+Este paquete contiene dos ingestas separadas: una muestra paginada de la API de
+avisos y el JSON de catálogo de contrataciones administrativas de los últimos
+90 días. Ninguna transforma registros ni presupone equivalencias entre ambos
+esquemas.
 
 ## Fuente y alcance
 
 - API documentada: [API REST de Contrataciones Públicas](https://opendata.euskadi.eus/webopd00-apicontract/es/?api=procurements)
 - Endpoint: `GET https://api.euskadi.eus/procurements/contracting-notices`
 - Ficha candidata: [Contrataciones Administrativas del 2026](https://opendata.euskadi.eus/catalogo/-/contrataciones/contrataciones-administrativas-del-2026/)
-- Licencia de la ficha: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- Licencia declarada en esa ficha: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
 La documentación de la API describe datos de avisos desde 2015 y actualización
 diaria. La ficha de 2026 describe anuncios publicados ese año por el Gobierno
@@ -17,6 +18,56 @@ Vasco, sus organismos autónomos y entes públicos. Aún no se ha verificado que
 alcance completo del endpoint y el de esa ficha sean idénticos. La ficha declara
 CC BY 4.0; antes de redistribuir respuestas de la API hay que confirmar que esa
 licencia cubre el alcance concreto de la consulta.
+
+## Ingesta del catálogo de los últimos 90 días
+
+La [ficha oficial de los últimos 90 días](https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/)
+ofrece una descarga JSON con anuncios de contratación administrativa. La
+ficha identifica CC BY 4.0 para este JSON; esto no confirma la licencia de
+todas las respuestas de la API de avisos.
+
+Desde la raíz del repositorio, la descarga manual se ejecuta con:
+
+```powershell
+python -m radar.catalog_source
+```
+
+El módulo descarga el JSON y consulta los metadatos RDF publicados por el
+catálogo. Cada ejecución válida se almacena en una carpeta nueva bajo
+`radar\data\raw\catalog\`, con `response.json` sin modificar y `manifest.json`.
+Se puede elegir otro directorio local con `--output-dir`. Los intentos fallidos
+se registran en una subcarpeta `failures` sin sustituir ejecuciones válidas.
+La regla `data/raw/` de `.gitignore` excluye estas descargas y manifiestos de
+Git. La publicación Static Web Apps se limita a `site/`; no se publican datos
+brutos.
+
+El manifiesto separa `downloaded_at_utc` (momento de descarga) de
+`source_updated_at` (fecha de actualización leída y validada desde RDF).
+`freshness_status` es `reciente`, `antiguo` o `no_verificable`. Si faltan los
+metadatos RDF o no se pueden interpretar, la descarga JSON válida se conserva
+y la frescura queda como no verificable. El umbral inicial de antigüedad es
+tres días: es una política de advertencia del proyecto, no una garantía de
+actualización del proveedor.
+
+Se registran los nombres y tipos JSON observados, campos presentes de forma
+irregular, cambios respecto a la ejecución válida anterior y SHA-256. Una
+coincidencia de hash indica una instantánea idéntica byte a byte; no demuestra
+que no haya anuncios nuevos ni se usa para deduplicar filas.
+
+El esquema del catálogo es preliminar: se observó en una captura una lista de
+objetos y campos cuyos valores eran texto, pero la ficha no documenta un
+diccionario completo ni la obligatoriedad, semántica, unicidad o estabilidad de
+cada campo. Los cambios de esquema se registran como advertencias y no se
+aplican equivalencias con el modelo de la API.
+
+Al reutilizar el JSON del catálogo, atribuye Open Data Euskadi y enlaza la
+[ficha](https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/)
+y la [licencia CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Indica la fecha de actualización publicada por la fuente y describe las
+modificaciones derivadas. El aviso legal del portal requiere citar la fuente,
+no alterar ni desnaturalizar la información y mencionar su última
+actualización. La atribución de la ficha no se extiende aquí a la API sin
+confirmar sus condiciones específicas.
 
 La API documenta filtros `publication-date.gt` y `publication-date.lt`,
 ordenación, `currentPage` e `itemsOfPage` (10 por defecto, máximo 50). El
@@ -111,10 +162,11 @@ respuestas brutas en esta fase.
 
 - El inventario de esquema y el tipado son preliminares; obligatoriedad,
   nulabilidad, semántica completa y reglas de negocio siguen sin confirmarse.
+- La ventana del catálogo es móvil y no representa por sí sola un archivo
+  histórico completo. Los mapeos entre el JSON del catálogo y la API no están
+  confirmados.
 - No hay limpieza, validación de calidad del dominio, análisis ni dashboard.
 - La petición de muestra no garantiza por sí sola que el endpoint represente
   exactamente el dataset anual de la ficha.
-- El workflow de Azure Static Web Apps permanece sin cambios. Despliega desde
-  la raíz del repositorio; no se debe abrir un pull request ni fusionar esta
-  carpeta a `main` hasta revisar si el código y los archivos del proyecto
-  podrían incluirse en el artefacto público.
+- La web pública se publica desde `site/`; el código, pruebas y datos de
+  `radar/` permanecen fuera del artefacto Static Web Apps.
