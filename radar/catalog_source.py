@@ -63,7 +63,7 @@ def _read_url(
         url,
         headers={
             "Accept": "application/json, application/rdf+xml, application/xml",
-            "User-Agent": "radar-contratacion-euskadi/0.1.0",
+            "User-Agent": "panel-indicadores-contratacion-euskadi/0.1.0",
         },
     )
     try:

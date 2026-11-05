@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Panel de indicadores de contratación pública de Euskadi, con métricas agregadas de publicaciones, órganos de contratación y calidad de datos."
+    >
+    <meta name="theme-color" content="#f5f3ee">
+    <title>Panel de indicadores de contratación pública | Rafael Castillo</title>
+    <link rel="stylesheet" href="radar-standalone.css">
+    <link rel="stylesheet" href="radar.css">
+    <script src="radar.js" defer></script>
+  </head>
+  <body class="radar-page">
+    <a class="skip-link" href="#radar-main">Saltar al contenido</a>
+    <header class="site-header radar-header">
+      <a class="wordmark" href="https://red-ocean-083530310.2.azurestaticapps.net/" aria-label="Rafael Castillo, currículum">RC<span>.</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="https://red-ocean-083530310.2.azurestaticapps.net/#perfil">Perfil</a>
+        <a href="https://red-ocean-083530310.2.azurestaticapps.net/#experiencia">Experiencia</a>
+        <a href="https://red-ocean-083530310.2.azurestaticapps.net/#formacion">Formación</a>
+        <a href="https://red-ocean-083530310.2.azurestaticapps.net/#competencias">Competencias</a>
+        <a href="https://red-ocean-083530310.2.azurestaticapps.net/proyectos.html">Proyectos</a>
+      </nav>
+      <a class="header-contact" href="https://red-ocean-083530310.2.azurestaticapps.net/#contact-title">Sobre mí <span aria-hidden="true">↗</span></a>
+    </header>
+    <nav class="radar-section-nav" aria-label="Secciones del panel">
+      <a href="#actividad">Actividad</a>
+      <a href="#calidad">Calidad</a>
+      <a href="#metodologia">Metodología</a>
+    </nav>
+
+    <main id="radar-main" class="radar-main">
+      <section class="radar-hero" aria-labelledby="radar-title">
+        <div class="radar-shell radar-hero-grid">
+          <div>
+            <p class="eyebrow"><span class="status-dot"></span> PROYECTO DE DATOS · EUSKADI</p>
+            <h1 id="radar-title">Indicadores de <span>contratación pública.</span></h1>
+            <p class="radar-lede">
+              Una lectura exploratoria de los anuncios administrativos publicados
+              recientemente: actividad, órganos que publican y señales de calidad
+              que conviene interpretar con contexto.
+            </p>
+            <p class="radar-caveat">
+              Analiza anuncios del catálogo móvil de los últimos 90 días; no es un
+              histórico completo ni un recuento de contratos adjudicados.
+            </p>
+          </div>
+          <aside class="snapshot-card" aria-label="Procedencia de esta instantánea">
+            <span class="snapshot-label">ESTADO DE LA INSTANTÁNEA</span>
+            <span id="freshness-badge" class="freshness-badge">Cargando…</span>
+            <dl>
+              <div><dt>Actualización publicada</dt><dd id="source-updated">—</dd></div>
+              <div><dt>Descarga del conjunto</dt><dd id="downloaded-at">—</dd></div>
+              <div><dt>Resumen generado</dt><dd id="generated-at">—</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <div id="load-status" class="radar-shell load-status" role="status" aria-live="polite">
+        Cargando el resumen agregado…
+      </div>
+
+      <section class="radar-shell kpi-grid" aria-label="Indicadores principales">
+        <article class="kpi-card">
+          <span class="kpi-index">01 / VOLUMEN</span>
+          <strong id="kpi-notices">—</strong>
+          <span>anuncios en la captura</span>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-index">02 / ÓRGANOS</span>
+          <strong id="kpi-organizations">—</strong>
+          <span>órganos distintos observados</span>
+        </article>
+        <article class="kpi-card">
+          <span class="kpi-index">03 / PUBLICACIÓN</span>
+          <strong id="kpi-publication-days">—</strong>
+          <span>fechas distintas con anuncios</span>
+        </article>
+        <article class="kpi-card kpi-card-accent">
+          <span class="kpi-index">04 / REVISIÓN</span>
+          <strong id="kpi-deadlines">—</strong>
+          <span>plazos anteriores a la actualización de la fuente</span>
+        </article>
+      </section>
+
+      <section id="actividad" class="radar-shell dashboard-section" aria-labelledby="activity-title">
+        <div class="section-label"><span>01</span> ACTIVIDAD</div>
+        <div class="dashboard-heading">
+          <div>
+            <h2 class="section-heading" id="activity-title">Ritmo de <span>publicación.</span></h2>
+            <p>Recuento por fecha de publicación documentada en el catálogo.</p>
+          </div>
+          <div class="filter-control">
+            <label for="organization-filter">Filtrar actividad por órgano</label>
+            <select id="organization-filter" disabled>
+              <option value="">Todos los órganos</option>
+            </select>
+          </div>
+        </div>
+        <figure class="chart-card">
+          <svg id="activity-chart" class="chart-svg" viewBox="0 0 960 340" role="img" aria-labelledby="activity-chart-title activity-chart-description">
+            <title id="activity-chart-title">Anuncios por fecha de publicación</title>
+            <desc id="activity-chart-description">Gráfico de líneas que se actualizará al cargar el resumen de datos.</desc>
+          </svg>
+          <figcaption id="activity-caption">El gráfico se basa en fechas válidas con formato día/mes/año.</figcaption>
+        </figure>
+        <details class="chart-table-details">
+          <summary>Consultar los valores del gráfico en una tabla</summary>
+          <div class="table-scroll">
+            <table>
+              <caption>Volumen de anuncios por fecha de publicación según el filtro seleccionado</caption>
+              <thead><tr><th scope="col">Fecha</th><th scope="col">Anuncios</th></tr></thead>
+              <tbody id="activity-table"></tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section class="radar-shell dashboard-section ranking-section" aria-labelledby="ranking-title">
+        <div class="section-label"><span>02</span> ÓRGANOS ACTIVOS</div>
+        <div class="dashboard-heading">
+          <div>
+            <h2 class="section-heading" id="ranking-title">Quién publica <span>más avisos.</span></h2>
+            <p>Diez órganos con mayor volumen en esta instantánea; no implica adjudicación.</p>
+          </div>
+        </div>
+        <figure class="chart-card">
+          <svg id="organization-chart" class="chart-svg ranking-svg" viewBox="0 0 960 420" role="img" aria-labelledby="organization-chart-title organization-chart-description">
+            <title id="organization-chart-title">Diez órganos con más anuncios</title>
+            <desc id="organization-chart-description">Gráfico de barras con recuento agregado por órgano de contratación.</desc>
+          </svg>
+          <figcaption>Los nombres corresponden al texto observado en el campo del órgano de contratación.</figcaption>
+        </figure>
+        <details class="chart-table-details">
+          <summary>Consultar el ranking en una tabla</summary>
+          <div class="table-scroll">
+            <table>
+              <caption>Diez órganos con mayor número de anuncios</caption>
+              <thead><tr><th scope="col">Posición</th><th scope="col">Órgano de contratación</th><th scope="col">Anuncios</th></tr></thead>
+              <tbody id="organization-table"></tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section id="calidad" class="quality-section" aria-labelledby="quality-title">
+        <div class="radar-shell">
+          <div class="section-label"><span>03</span> CALIDAD Y LÍMITES</div>
+          <div class="dashboard-heading">
+            <div>
+              <h2 class="section-heading" id="quality-title">Transparencia sobre <span>los datos.</span></h2>
+              <p>La completitud describe presencia de valores, no su validez semántica.</p>
+            </div>
+          </div>
+          <div class="quality-grid">
+            <article class="quality-card">
+              <h3>Completitud de campos usados</h3>
+              <div class="table-scroll">
+                <table>
+                  <caption>Valores no vacíos en los campos analizados</caption>
+                  <thead><tr><th scope="col">Campo observado</th><th scope="col">No vacíos</th><th scope="col">Vacíos</th><th scope="col">Completitud</th></tr></thead>
+                  <tbody id="completeness-table"></tbody>
+                </table>
+              </div>
+            </article>
+            <article class="quality-card quality-counts">
+              <h3>Fechas para revisar</h3>
+              <dl>
+                <div><dt>Publicación: formato inválido</dt><dd id="invalid-publication">—</dd></div>
+                <div><dt>Publicación: vacío</dt><dd id="empty-publication">—</dd></div>
+                <div><dt>Plazo límite: formato inválido</dt><dd id="invalid-deadline">—</dd></div>
+                <div><dt>Plazo límite: vacío</dt><dd id="empty-deadline">—</dd></div>
+              </dl>
+            </article>
+          </div>
+          <p class="quality-note">
+            Los plazos anteriores al día de actualización publicado se señalan
+            como posibles casos para revisar; el dato no confirma que el plazo
+            esté cerrado ni que el anuncio haya quedado sin efecto.
+          </p>
+        </div>
+      </section>
+
+      <section id="metodologia" class="radar-shell methodology-section" aria-labelledby="methodology-title">
+        <div class="section-label"><span>04</span> MÉTODO Y FUENTE</div>
+        <div class="methodology-grid">
+          <div>
+            <h2 class="section-heading" id="methodology-title">Agregados claros,<br><span>sin prometer de más.</span></h2>
+            <p>
+              Se conserva la captura original fuera del sitio público. La
+              automatización valida su hash, los metadatos y las fechas con los
+              formatos observados antes de instalar únicamente recuentos agregados.
+            </p>
+          </div>
+          <div class="methodology-copy">
+            <h3>Alcance y limitaciones</h3>
+            <ul>
+              <li>La fuente reúne anuncios de contratación administrativa de los últimos 90 días; la ventana es móvil.</li>
+              <li>Los nombres y significados de campo son observaciones preliminares, no un esquema contractual exhaustivo.</li>
+              <li>La fecha de publicación se toma de <code>contratacion_fecha_de_publicacion_documento</code>. No se sustituye por <code>lastPublicationDate</code>.</li>
+              <li>Los órganos distintos se cuentan por el texto observado, sin unificar variantes.</li>
+              <li>No se muestran datos individuales, importes adjudicados ni tipos de contrato como métricas.</li>
+            </ul>
+            <h3>Atribución</h3>
+            <p>
+              Fuente: <a id="dataset-link" href="https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/" target="_blank" rel="noreferrer">Open Data Euskadi · Contrataciones administrativas de los últimos 90 días</a>.
+              La ficha de este conjunto identifica el JSON bajo
+              <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>;
+              esta atribución no se extiende a otras API del portal.
+              Se han realizado agregaciones y transformaciones; la fecha publicada
+              por la fuente y el momento de descarga se presentan por separado.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer radar-footer">
+      <a class="wordmark" href="https://red-ocean-083530310.2.azurestaticapps.net/" aria-label="Volver al currículum">RC<span>.</span></a>
+      <p>Panel de indicadores de contratación pública · Proyecto de datos de Rafael Castillo</p>
+      <a href="https://red-ocean-083530310.2.azurestaticapps.net/proyectos.html">Ver proyectos ↑</a>
+    </footer>
+  </body>
+</html>

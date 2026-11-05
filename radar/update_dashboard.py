@@ -580,11 +580,12 @@ def prepare_work_directory(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Prepara y publica de forma segura el resumen agregado del Radar."
+        description="Prepara y publica de forma segura el resumen agregado del panel."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     prepare_parser = subparsers.add_parser(
-        "prepare", help="Descarga, valida y prepara un resumen fuera de site/."
+        "prepare",
+        help="Descarga, valida y prepara un resumen fuera de public/.",
     )
     prepare_parser.add_argument(
         "--work-dir", type=Path, default=DEFAULT_WORK_DIRECTORY

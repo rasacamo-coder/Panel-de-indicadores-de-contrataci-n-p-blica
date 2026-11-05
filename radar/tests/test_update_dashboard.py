@@ -65,9 +65,9 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root)
-            public = root / "site" / "radar-summary.json"
+            public = root / "public" / "data" / "radar-summary.json"
             previous = b'{"previous":"valid"}\n'
-            public.parent.mkdir()
+            public.parent.mkdir(parents=True)
             public.write_bytes(previous)
             staged = root / "work" / "radar-summary.json"
 
@@ -92,8 +92,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root, records=[])
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             previous = b"last valid summary\n"
             public.write_bytes(previous)
             staged = root / "work" / "radar-summary.json"
@@ -110,8 +110,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root, source_date="2026-10-20")
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             previous = b"last valid summary\n"
             public.write_bytes(previous)
 
@@ -129,8 +129,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root, source_date=None)
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             previous = b"last valid summary\n"
             public.write_bytes(previous)
 
@@ -173,8 +173,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             work_directory = root / ".radar-work"
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             previous = b"last valid summary\n"
             public.write_bytes(previous)
 
@@ -194,8 +194,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root)
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             existing = aggregate_records(
                 {
                     "dataset_url": DATASET_URL,
@@ -228,8 +228,8 @@ class DashboardUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             captures = create_capture(root, records=RECORDS * 2)
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             old = aggregate_records(
                 {
                     "dataset_url": DATASET_URL,
@@ -262,8 +262,8 @@ class DashboardUpdateTests(unittest.TestCase):
             data = json.loads(staged.read_text("utf-8"))
             data["records"] = [{"id": "individual"}]
             staged.write_text(json.dumps(data), encoding="utf-8")
-            public = root / "site" / "radar-summary.json"
-            public.parent.mkdir()
+            public = root / "public" / "data" / "radar-summary.json"
+            public.parent.mkdir(parents=True)
             previous = b"last valid summary\n"
             public.write_bytes(previous)
 

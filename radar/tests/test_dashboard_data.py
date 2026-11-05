@@ -179,7 +179,7 @@ class DashboardAggregationTests(unittest.TestCase):
             (capture / "manifest.json").write_text(
                 json.dumps(manifest), encoding="utf-8"
             )
-            output = root / "public" / "radar-summary.json"
+            output = root / "public" / "data" / "radar-summary.json"
 
             build_dashboard_data(
                 root,

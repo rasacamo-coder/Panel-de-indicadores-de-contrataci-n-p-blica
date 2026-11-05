@@ -1,0 +1,58 @@
+name: Update public indicators
+
+on:
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: public-indicators-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: >-
+      github.event_name == 'schedule' ||
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the default branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download, validate and prepare the aggregate
+        run: python -m radar.update_dashboard prepare --work-dir .radar-work
+
+      - name: Run data and publication regression tests
+        run: python -m unittest discover -s radar/tests -v
+
+      - name: Check dashboard JavaScript syntax
+        run: node --check public/radar.js
+
+      - name: Install the validated aggregate
+        run: python -m radar.update_dashboard publish --work-dir .radar-work
+
+      - name: Check patch whitespace
+        run: git diff --check
+
+      - name: Commit only a changed public aggregate
+        shell: bash
+        run: |
+          git add -- public/data/radar-summary.json
+          if git diff --cached --quiet; then
+            echo "The validated public summary has not changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: update public indicators" \
+            -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          git push

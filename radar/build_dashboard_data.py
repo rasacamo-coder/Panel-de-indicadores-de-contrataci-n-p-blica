@@ -15,7 +15,7 @@ from radar.catalog_source import CATALOG_JSON_URL, DATASET_URL
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT_ROOT = Path(__file__).resolve().parent / "data" / "raw" / "catalog"
-DEFAULT_OUTPUT_PATH = REPOSITORY_ROOT / "site" / "data" / "radar-summary.json"
+DEFAULT_OUTPUT_PATH = REPOSITORY_ROOT / "public" / "data" / "radar-summary.json"
 
 PUBLICATION_DATE_FIELD = "contratacion_fecha_de_publicacion_documento"
 ORGANIZATION_FIELD = "contratacion_organo_contratacion"
@@ -323,7 +323,7 @@ def build_dashboard_data(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Genera datos agregados del Radar desde la última captura local válida."
+        description="Genera datos agregados del panel desde la última captura local válida."
     )
     parser.add_argument("--input-dir", type=Path, default=DEFAULT_INPUT_ROOT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
