@@ -32,6 +32,9 @@ a { color: inherit; }
 .site-header nav a:hover, .header-contact:hover, .site-footer a:hover { color: var(--green); }
 .header-contact { color: var(--ink); }
 .header-contact span { padding-left: 6px; color: var(--green); }
+.language-toggle { border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px; background: transparent; color: var(--green); font: 600 11px var(--body); cursor: pointer; }
+.language-toggle:hover, .language-toggle:focus-visible { background: var(--green); color: white; }
+.language-toggle:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 
 .hero { position: relative; display: grid; grid-template-columns: 1.3fr .7fr; align-items: center; gap: 80px; min-height: 650px; padding-top: 65px; padding-bottom: 96px; }
 .eyebrow, .section-label, .card-topline, .scroll-note, .skill-index, .education-status, .education-year, .job-type, .timeline-date, .contact-note { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
@@ -164,6 +167,7 @@ h1, h2, h3, p { margin-top: 0; }
   .site-header nav::-webkit-scrollbar { display: none; }
   .site-header nav a { flex-shrink: 0; font-size: 10px; }
   .header-contact { display: none; }
+  .language-toggle { flex: 0 0 auto; padding: 6px 8px; }
   .wordmark { font-size: 21px; }
   .hero { grid-template-columns: 1fr; gap: 39px; min-height: unset; padding-top: 65px; padding-bottom: 88px; }
   .hero h1 { font-size: clamp(47px, 12vw, 65px); }

@@ -13,9 +13,11 @@ class PublicArtifactTests(unittest.TestCase):
 
         self.assertIn('href="radar-standalone.css"', html)
         self.assertIn('href="radar.css"', html)
+        self.assertIn('src="radar-language.js"', html)
         self.assertIn('src="radar.js"', html)
         self.assertTrue((PUBLIC_DIRECTORY / "radar-standalone.css").is_file())
         self.assertTrue((PUBLIC_DIRECTORY / "radar.css").is_file())
+        self.assertTrue((PUBLIC_DIRECTORY / "radar-language.js").is_file())
         self.assertTrue((PUBLIC_DIRECTORY / "radar.js").is_file())
         self.assertTrue(
             (PUBLIC_DIRECTORY / "data" / "radar-summary.json").is_file()

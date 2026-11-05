@@ -2,13 +2,12 @@
   "use strict";
 
   const SUMMARY_URL = "data/radar-summary.json";
-  const DATE_FORMATTER = new Intl.DateTimeFormat("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC"
+  const language = () => window.siteLanguage?.current === "en" ? "en" : "es";
+  const translate = (value) => window.siteLanguage?.translate(value) || value;
+  const dateFormatter = () => new Intl.DateTimeFormat(language() === "en" ? "en-GB" : "es-ES", {
+    day: "2-digit", month: "2-digit", year: "numeric", timeZone: "UTC"
   });
-  const NUMBER_FORMATTER = new Intl.NumberFormat("es-ES");
+  const numberFormatter = () => new Intl.NumberFormat(language() === "en" ? "en-GB" : "es-ES");
   const SVG_NS = "http://www.w3.org/2000/svg";
 
   const elements = {
@@ -38,20 +37,21 @@
   };
 
   function formatCount(value) {
-    return value === null || value === undefined ? "No disponible" : NUMBER_FORMATTER.format(value);
+    return value === null || value === undefined ? translate("No disponible") : numberFormatter().format(value);
   }
 
   function formatDate(value) {
-    if (!value) return "No disponible";
+    if (!value) return translate("No disponible");
     const parsed = new Date(value);
-    return Number.isNaN(parsed.getTime()) ? "No disponible" : DATE_FORMATTER.format(parsed);
+    return Number.isNaN(parsed.getTime()) ? translate("No disponible") : dateFormatter().format(parsed);
   }
 
   function formatTimestamp(value) {
-    if (!value) return "No disponible";
+    if (!value) return translate("No disponible");
     const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) return "No disponible";
-    return `${DATE_FORMATTER.format(parsed)} · ${new Intl.DateTimeFormat("es-ES", {
+    if (Number.isNaN(parsed.getTime())) return translate("No disponible");
+    const locale = language() === "en" ? "en-GB" : "es-ES";
+    return `${dateFormatter().format(parsed)} · ${new Intl.DateTimeFormat(locale, {
       hour: "2-digit",
       minute: "2-digit",
       timeZone: "UTC",
@@ -81,18 +81,18 @@
 
   function renderActivityChart(rows, selectedOrganization) {
     const svg = elements.activityChart;
-    const label = selectedOrganization || "todos los órganos";
+    const label = selectedOrganization || translate("todos los órganos");
     resetChart(
       svg,
       "activity-chart-title",
       "activity-chart-description",
-      `Anuncios por fecha de publicación para ${label}.`
+      `${translate("Anuncios por fecha de publicación para")} ${label}.`
     );
     elements.activityTable.replaceChildren();
 
     if (!Array.isArray(rows) || rows.length === 0) {
-      appendEmptyChart(svg, "No hay fechas válidas disponibles para mostrar.");
-      elements.activityCaption.textContent = "No se puede dibujar la serie con las fechas disponibles.";
+      appendEmptyChart(svg, translate("No hay fechas válidas disponibles para mostrar."));
+      elements.activityCaption.textContent = translate("No se puede dibujar la serie con las fechas disponibles.");
       return;
     }
 
@@ -115,7 +115,7 @@
       }));
       svg.append(svgElement("text", {
         x: String(left - 10), y: String(y + 4), "text-anchor": "end"
-      }, NUMBER_FORMATTER.format(value)));
+      }, numberFormatter().format(value)));
     }
 
     const points = rows.map((row, index) => {
@@ -139,7 +139,7 @@
         r: "4.5",
         class: "chart-point"
       });
-      circle.append(svgElement("title", {}, `${dateLabel}: ${formatCount(point.row.notice_count)} anuncios`));
+      circle.append(svgElement("title", {}, `${dateLabel}: ${formatCount(point.row.notice_count)} ${translate("anuncios")}`));
       svg.append(circle);
       if (index % labelStep === 0 || index === points.length - 1) {
         svg.append(svgElement("text", {
@@ -157,8 +157,9 @@
       elements.activityTable.append(row);
     });
 
-    elements.activityCaption.textContent =
-      `Mostrando ${rows.length} fecha(s) con publicación válida para ${label}.`;
+    elements.activityCaption.textContent = language() === "en"
+      ? `Showing ${rows.length} valid publication date${rows.length === 1 ? "" : "s"} for ${label}.`
+      : `Mostrando ${rows.length} fecha(s) con publicación válida para ${label}.`;
   }
 
   function renderOrganizationChart(ranking) {
@@ -167,11 +168,11 @@
       svg,
       "organization-chart-title",
       "organization-chart-description",
-      "Ranking agregado de hasta diez órganos de contratación por número de anuncios."
+      translate("Ranking agregado de hasta diez órganos de contratación por número de anuncios.")
     );
     elements.organizationTable.replaceChildren();
     if (!Array.isArray(ranking) || ranking.length === 0) {
-      appendEmptyChart(svg, "Ranking no disponible: el campo de órgano no está observado.");
+      appendEmptyChart(svg, translate("Ranking no disponible: el campo de órgano no está observado."));
       return;
     }
 
@@ -214,9 +215,9 @@
 
   function renderCompleteness(metrics) {
     const labels = [
-      ["contratacion_fecha_de_publicacion_documento", "Fecha de publicación"],
-      ["contratacion_organo_contratacion", "Órgano de contratación"],
-      ["contratacion_fecha_limite_presentacion", "Fecha límite de presentación"]
+      ["contratacion_fecha_de_publicacion_documento", translate("Fecha de publicación")],
+      ["contratacion_organo_contratacion", translate("Órgano de contratación")],
+      ["contratacion_fecha_limite_presentacion", translate("Fecha límite de presentación")]
     ];
     elements.completenessTable.replaceChildren();
     labels.forEach(([field, label]) => {
@@ -227,9 +228,9 @@
             label,
             `${formatCount(metric.non_empty_records)} / ${formatCount(metric.total_records)}`,
             formatCount(metric.missing_or_empty_records),
-            metric.available ? `${NUMBER_FORMATTER.format(metric.completeness_percent)} %` : "No disponible"
+            metric.available ? `${numberFormatter().format(metric.completeness_percent)} %` : translate("No disponible")
           ]
-        : [label, "No disponible", "No disponible", "No disponible"];
+        : [label, translate("No disponible"), translate("No disponible"), translate("No disponible")];
       values.forEach((value) => {
         const cell = document.createElement("td");
         cell.textContent = value;
@@ -241,7 +242,7 @@
 
   function renderActivityFilter(data) {
     const organizations = data.activity_by_organization;
-    elements.filter.replaceChildren(new Option("Todos los órganos", ""));
+    elements.filter.replaceChildren(new Option(translate("Todos los órganos"), ""));
     if (!Array.isArray(organizations)) {
       elements.filter.disabled = true;
       return;
@@ -260,7 +261,11 @@
     return organization ? organization.activity_by_date : [];
   }
 
+  let filterListenerAttached = false;
+  let summaryData;
+
   function showData(data) {
+    const selectedOrganization = elements.filter.value;
     elements.loadStatus.textContent = "";
     elements.loadStatus.removeAttribute("data-error");
     elements.notices.textContent = formatCount(data.summary.notice_count);
@@ -273,9 +278,9 @@
 
     const freshness = data.source.freshness_status || "no_verificable";
     const freshnessLabels = {
-      reciente: "Actualización reciente",
-      antiguo: "Fuente posiblemente antigua",
-      no_verificable: "Frescura no verificable"
+      reciente: translate("Actualización reciente"),
+      antiguo: translate("Fuente posiblemente antigua"),
+      no_verificable: translate("Frescura no verificable")
     };
     elements.freshness.textContent = freshnessLabels[freshness] || freshnessLabels.no_verificable;
     elements.freshness.dataset.state = freshness;
@@ -288,14 +293,27 @@
     renderCompleteness(data.field_completeness || {});
     renderOrganizationChart(data.top_organizations);
     renderActivityFilter(data);
-    renderActivityChart(activityForSelection(data, ""), "");
-    elements.filter.addEventListener("change", () => {
-      renderActivityChart(
-        activityForSelection(data, elements.filter.value),
-        elements.filter.value
-      );
-    });
+    if (data.activity_by_organization?.some((entry) => entry.organization === selectedOrganization)) {
+      elements.filter.value = selectedOrganization;
+    }
+    renderActivityChart(
+      activityForSelection(data, elements.filter.value),
+      elements.filter.value
+    );
+    if (!filterListenerAttached) {
+      elements.filter.addEventListener("change", () => {
+        renderActivityChart(
+          activityForSelection(summaryData, elements.filter.value),
+          elements.filter.value
+        );
+      });
+      filterListenerAttached = true;
+    }
   }
+
+  window.addEventListener("site-language-change", () => {
+    if (summaryData) showData(summaryData);
+  });
 
   async function loadSummary() {
     try {
@@ -305,12 +323,14 @@
       if (data.schema_version !== 1 || !data.summary || !data.source) {
         throw new Error("Formato de resumen no compatible");
       }
-      showData(data);
+      summaryData = data;
+      showData(summaryData);
     } catch (error) {
       elements.loadStatus.dataset.error = "true";
-      elements.loadStatus.textContent =
-        "No se pudo cargar el resumen local. Comprueba que el sitio se sirve por HTTP y que existe data/radar-summary.json.";
-      elements.freshness.textContent = "Datos no disponibles";
+      elements.loadStatus.textContent = translate(
+        "No se pudo cargar el resumen local. Comprueba que el sitio se sirve por HTTP y que existe data/radar-summary.json."
+      );
+      elements.freshness.textContent = translate("Datos no disponibles");
       elements.freshness.dataset.state = "no_verificable";
     }
   }

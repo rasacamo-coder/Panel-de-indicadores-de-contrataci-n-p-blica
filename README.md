@@ -43,10 +43,16 @@ python -m http.server 8000 --directory public
 Abre `http://localhost:8000/`. Abrir el HTML con `file://` no permite cargar de
 forma fiable el resumen JSON por las restricciones del navegador.
 
+El dashboard ofrece un selector ES/EN. Sin una preferencia guardada, detecta
+un navegador en inglés y, en los demás casos, muestra español. La elección se
+recuerda en el navegador; el mismo idioma se comparte con el CV y el
+portafolio de Rafael cuando se visitan en ese navegador.
+
 Las pruebas offline usan únicamente la biblioteca estándar de Python:
 
 ```powershell
 python -m unittest discover -s radar\tests -v
+node --check public\radar-language.js
 node --check public\radar.js
 ```
 
@@ -69,7 +75,8 @@ manualmente desde **Actions → Update public indicators → Run workflow**. El 
 comprueba la estructura y frescura de la fuente, valida los agregados y
 confirma únicamente el JSON público si ha cambiado.
 
-El sitio de Rafael integra el dashboard conservando la URL
+El dashboard conserva las rutas y sincroniza su selector y recursos ES/EN desde
+este repositorio. El sitio de Rafael integra el dashboard conservando la URL
 `/radar.html`. Su workflow obtiene los archivos de `public/` desde la rama
 principal de este repositorio y los publica junto con la web en Azure Static
 Web Apps. La web vuelve a sincronizarlos cada día después de la actualización
