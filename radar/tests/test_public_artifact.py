@@ -1,6 +1,7 @@
 import json
 import unittest
 from pathlib import Path
+from xml.etree import ElementTree
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
@@ -34,6 +35,12 @@ class PublicArtifactTests(unittest.TestCase):
         html = (PUBLIC_DIRECTORY / "index.html").read_text(encoding="utf-8")
         self.assertIn('href="https://www.castillomontoya.com/proyectos.html"', html)
         self.assertNotIn("red-ocean-083530310.2.azurestaticapps.net", html)
+
+    def test_favicon_is_published_and_linked(self):
+        html = (PUBLIC_DIRECTORY / "index.html").read_text(encoding="utf-8")
+        self.assertIn('<link rel="icon" type="image/svg+xml" href="favicon.svg">', html)
+        icon = PUBLIC_DIRECTORY / "favicon.svg"
+        self.assertEqual(ElementTree.parse(icon).getroot().tag, "{http://www.w3.org/2000/svg}svg")
 
 
 if __name__ == "__main__":
