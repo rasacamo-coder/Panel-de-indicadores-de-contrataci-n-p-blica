@@ -1,43 +1,43 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-05T19:44:56+00:00",
+  "generated_at_utc": "2026-11-06T12:17:48+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-05",
-    "downloaded_at_utc": "2026-11-05T19:44:56.250855+00:00",
-    "snapshot_sha256": "c5acf4aaf4a536873a5cad1b9284c8d013d57f4c83dfcc36c80b479b5fa78625",
+    "source_updated_at": "2026-11-06",
+    "downloaded_at_utc": "2026-11-06T12:17:46.247407+00:00",
+    "snapshot_sha256": "aedebffbd9e47548821ed67e6e3413eb1324c136d7c4e019f2972ae72b3dc945",
     "freshness_status": "reciente",
-    "record_count": 462
+    "record_count": 495
   },
   "summary": {
-    "notice_count": 462,
-    "distinct_organizations": 110,
-    "distinct_publication_dates": 44,
-    "deadlines_before_source_update_day": 6
+    "notice_count": 495,
+    "distinct_organizations": 114,
+    "distinct_publication_dates": 45,
+    "deadlines_before_source_update_day": 10
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
       "observed_field": "contratacion_fecha_de_publicacion_documento",
       "available": true,
-      "total_records": 462,
-      "non_empty_records": 462,
+      "total_records": 495,
+      "non_empty_records": 495,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_organo_contratacion": {
       "observed_field": "contratacion_organo_contratacion",
       "available": true,
-      "total_records": 462,
-      "non_empty_records": 462,
+      "total_records": 495,
+      "non_empty_records": 495,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_fecha_limite_presentacion": {
       "observed_field": "contratacion_fecha_limite_presentacion",
       "available": true,
-      "total_records": 462,
-      "non_empty_records": 462,
+      "total_records": 495,
+      "non_empty_records": 495,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     }
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-09-30",
-      "notice_count": 2
+      "notice_count": 1
     },
     {
       "date": "2026-10-01",
@@ -96,7 +96,7 @@
     },
     {
       "date": "2026-10-02",
-      "notice_count": 4
+      "notice_count": 2
     },
     {
       "date": "2026-10-04",
@@ -108,7 +108,7 @@
     },
     {
       "date": "2026-10-06",
-      "notice_count": 7
+      "notice_count": 6
     },
     {
       "date": "2026-10-07",
@@ -120,7 +120,7 @@
     },
     {
       "date": "2026-10-09",
-      "notice_count": 14
+      "notice_count": 12
     },
     {
       "date": "2026-10-10",
@@ -136,19 +136,19 @@
     },
     {
       "date": "2026-10-13",
-      "notice_count": 6
+      "notice_count": 5
     },
     {
       "date": "2026-10-14",
-      "notice_count": 12
+      "notice_count": 11
     },
     {
       "date": "2026-10-15",
-      "notice_count": 13
+      "notice_count": 11
     },
     {
       "date": "2026-10-16",
-      "notice_count": 13
+      "notice_count": 12
     },
     {
       "date": "2026-10-17",
@@ -164,15 +164,15 @@
     },
     {
       "date": "2026-10-20",
-      "notice_count": 5
+      "notice_count": 4
     },
     {
       "date": "2026-10-21",
-      "notice_count": 21
+      "notice_count": 19
     },
     {
       "date": "2026-10-22",
-      "notice_count": 31
+      "notice_count": 30
     },
     {
       "date": "2026-10-23",
@@ -225,20 +225,28 @@
     {
       "date": "2026-11-04",
       "notice_count": 30
+    },
+    {
+      "date": "2026-11-05",
+      "notice_count": 48
     }
   ],
   "top_organizations": [
     {
       "organization": "Alcalde",
-      "notice_count": 66
+      "notice_count": 75
     },
     {
       "organization": "Director Gerente",
-      "notice_count": 38
+      "notice_count": 36
     },
     {
       "organization": "Alcaldía",
-      "notice_count": 28
+      "notice_count": 33
+    },
+    {
+      "organization": "Consejo de Administración",
+      "notice_count": 27
     },
     {
       "organization": "Junta de Gobierno Local",
@@ -246,40 +254,32 @@
     },
     {
       "organization": "Pleno",
-      "notice_count": 23
+      "notice_count": 24
     },
     {
-      "organization": "Consejo de Administración",
-      "notice_count": 21
+      "organization": "Director General, Presidente, Vicepresidente del Consejo de Administración o Consejo de Administraci",
+      "notice_count": 14
     },
     {
       "organization": "Alcalde del Ayuntamiento de Eibar",
+      "notice_count": 13
+    },
+    {
+      "organization": "Comisión Delegada en Materia de Contratación de ETS",
       "notice_count": 12
     },
     {
       "organization": "Consejo de Gobierno Foral",
       "notice_count": 12
-    },
-    {
-      "organization": "Director General",
-      "notice_count": 12
-    },
-    {
-      "organization": "Comisión Delegada en Materia de Contratación de ETS",
-      "notice_count": 11
     }
   ],
   "activity_by_organization": [
     {
       "organization": "Alcalde",
-      "notice_count": 66,
+      "notice_count": 75,
       "activity_by_date": [
         {
           "date": "2026-10-06",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-09",
           "notice_count": 1
         },
         {
@@ -353,12 +353,16 @@
         {
           "date": "2026-11-04",
           "notice_count": 7
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 10
         }
       ]
     },
     {
       "organization": "Alcalde del Ayuntamiento de Eibar",
-      "notice_count": 12,
+      "notice_count": 13,
       "activity_by_date": [
         {
           "date": "2026-10-16",
@@ -387,6 +391,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
         }
       ]
     },
@@ -412,7 +420,7 @@
         },
         {
           "date": "2026-10-22",
-          "notice_count": 2
+          "notice_count": 1
         },
         {
           "date": "2026-10-25",
@@ -420,6 +428,10 @@
         },
         {
           "date": "2026-10-29",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -446,7 +458,7 @@
     },
     {
       "organization": "Alcaldía",
-      "notice_count": 28,
+      "notice_count": 33,
       "activity_by_date": [
         {
           "date": "2026-09-11",
@@ -503,6 +515,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 5
         }
       ]
     },
@@ -538,10 +554,14 @@
     },
     {
       "organization": "B01480334",
-      "notice_count": 1,
+      "notice_count": 2,
       "activity_by_date": [
         {
           "date": "2026-10-28",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -558,7 +578,7 @@
     },
     {
       "organization": "Comisión Delegada en Materia de Contratación de ETS",
-      "notice_count": 11,
+      "notice_count": 12,
       "activity_by_date": [
         {
           "date": "2026-09-17",
@@ -587,6 +607,10 @@
         {
           "date": "2026-10-30",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
         }
       ]
     },
@@ -602,7 +626,7 @@
     },
     {
       "organization": "Comité directivo",
-      "notice_count": 2,
+      "notice_count": 3,
       "activity_by_date": [
         {
           "date": "2026-10-30",
@@ -610,6 +634,20 @@
         },
         {
           "date": "2026-11-04",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "COMUNIDAD DE REGANTES VALLE BAJO DEL INGLARES",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -685,6 +723,16 @@
       ]
     },
     {
+      "organization": "Concejo de Espejo",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
       "organization": "Concejo de Zuaza",
       "notice_count": 1,
       "activity_by_date": [
@@ -736,7 +784,7 @@
     },
     {
       "organization": "Consejo de Administración",
-      "notice_count": 21,
+      "notice_count": 27,
       "activity_by_date": [
         {
           "date": "2026-10-07",
@@ -785,16 +833,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 2
-        }
-      ]
-    },
-    {
-      "organization": "Consejo de administración",
-      "notice_count": 1,
-      "activity_by_date": [
+        },
         {
-          "date": "2026-10-21",
-          "notice_count": 1
+          "date": "2026-11-05",
+          "notice_count": 6
         }
       ]
     },
@@ -814,6 +856,16 @@
       "activity_by_date": [
         {
           "date": "2026-10-04",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "Consejo de Adminsitración",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -930,12 +982,8 @@
     },
     {
       "organization": "Diputado Foral de Administración Pública y Relaciones Institucionales",
-      "notice_count": 3,
+      "notice_count": 2,
       "activity_by_date": [
-        {
-          "date": "2026-10-02",
-          "notice_count": 1
-        },
         {
           "date": "2026-10-16",
           "notice_count": 1
@@ -1237,10 +1285,6 @@
           "notice_count": 1
         },
         {
-          "date": "2026-10-20",
-          "notice_count": 1
-        },
-        {
           "date": "2026-10-26",
           "notice_count": 1
         },
@@ -1255,12 +1299,16 @@
         {
           "date": "2026-11-03",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
         }
       ]
     },
     {
       "organization": "Director /a General de LANBIDE-Servicio Vasco de Empleo",
-      "notice_count": 7,
+      "notice_count": 8,
       "activity_by_date": [
         {
           "date": "2026-10-09",
@@ -1285,23 +1333,19 @@
         {
           "date": "2026-11-04",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
         }
       ]
     },
     {
       "organization": "Director General",
-      "notice_count": 12,
+      "notice_count": 11,
       "activity_by_date": [
         {
-          "date": "2026-10-02",
-          "notice_count": 1
-        },
-        {
           "date": "2026-10-10",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-21",
           "notice_count": 1
         },
         {
@@ -1330,6 +1374,10 @@
         },
         {
           "date": "2026-11-02",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -1372,7 +1420,7 @@
     },
     {
       "organization": "Director General, Presidente, Vicepresidente del Consejo de Administración o Consejo de Administraci",
-      "notice_count": 10,
+      "notice_count": 14,
       "activity_by_date": [
         {
           "date": "2026-10-04",
@@ -1397,6 +1445,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 4
         }
       ]
     },
@@ -1412,12 +1464,8 @@
     },
     {
       "organization": "Director Gerente",
-      "notice_count": 38,
+      "notice_count": 36,
       "activity_by_date": [
-        {
-          "date": "2026-09-30",
-          "notice_count": 1
-        },
         {
           "date": "2026-10-01",
           "notice_count": 1
@@ -1440,7 +1488,7 @@
         },
         {
           "date": "2026-10-14",
-          "notice_count": 2
+          "notice_count": 1
         },
         {
           "date": "2026-10-15",
@@ -1694,7 +1742,7 @@
     },
     {
       "organization": "Gerente",
-      "notice_count": 7,
+      "notice_count": 8,
       "activity_by_date": [
         {
           "date": "2026-10-21",
@@ -1715,12 +1763,16 @@
         {
           "date": "2026-11-03",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 1
         }
       ]
     },
     {
       "organization": "Gerente de la UPV/EHU",
-      "notice_count": 6,
+      "notice_count": 8,
       "activity_by_date": [
         {
           "date": "2026-10-15",
@@ -1741,12 +1793,16 @@
         {
           "date": "2026-10-26",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 2
         }
       ]
     },
     {
       "organization": "Junta de Gobierno",
-      "notice_count": 9,
+      "notice_count": 7,
       "activity_by_date": [
         {
           "date": "2026-10-08",
@@ -1754,7 +1810,7 @@
         },
         {
           "date": "2026-10-15",
-          "notice_count": 4
+          "notice_count": 2
         },
         {
           "date": "2026-10-23",
@@ -1802,14 +1858,10 @@
         },
         {
           "date": "2026-10-06",
-          "notice_count": 2
-        },
-        {
-          "date": "2026-10-11",
           "notice_count": 1
         },
         {
-          "date": "2026-10-16",
+          "date": "2026-10-11",
           "notice_count": 1
         },
         {
@@ -1855,6 +1907,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 2
         }
       ]
     },
@@ -1920,7 +1976,7 @@
     },
     {
       "organization": "Pleno",
-      "notice_count": 23,
+      "notice_count": 24,
       "activity_by_date": [
         {
           "date": "2026-08-27",
@@ -1936,7 +1992,7 @@
         },
         {
           "date": "2026-10-09",
-          "notice_count": 3
+          "notice_count": 2
         },
         {
           "date": "2026-10-13",
@@ -1993,6 +2049,10 @@
         {
           "date": "2026-11-04",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 2
         }
       ]
     },
@@ -2012,6 +2072,16 @@
       "activity_by_date": [
         {
           "date": "2026-10-25",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "Pleno Municipal",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -2042,7 +2112,7 @@
     },
     {
       "organization": "Presidente",
-      "notice_count": 7,
+      "notice_count": 9,
       "activity_by_date": [
         {
           "date": "2026-10-06",
@@ -2067,6 +2137,10 @@
         {
           "date": "2026-10-30",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
+          "notice_count": 2
         }
       ]
     },
@@ -2136,14 +2210,10 @@
     },
     {
       "organization": "Subdirector General",
-      "notice_count": 5,
+      "notice_count": 4,
       "activity_by_date": [
         {
           "date": "2026-09-30",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-13",
           "notice_count": 1
         },
         {
@@ -2168,7 +2238,7 @@
     },
     {
       "organization": "Viceconsejería de Administración y Servicios Generales",
-      "notice_count": 2,
+      "notice_count": 3,
       "activity_by_date": [
         {
           "date": "2026-09-01",
@@ -2176,6 +2246,10 @@
         },
         {
           "date": "2026-10-26",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
@@ -2196,6 +2270,16 @@
       "activity_by_date": [
         {
           "date": "2026-10-09",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "Vicepresidencia de BASQUETOUR",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-05",
           "notice_count": 1
         }
       ]
