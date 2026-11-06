@@ -30,6 +30,11 @@ class PublicArtifactTests(unittest.TestCase):
         self.assertIsInstance(summary.get("summary"), dict)
         self.assertNotIn("records", summary)
 
+    def test_portfolio_links_use_custom_domain(self):
+        html = (PUBLIC_DIRECTORY / "index.html").read_text(encoding="utf-8")
+        self.assertIn('href="https://www.castillomontoya.com/proyectos.html"', html)
+        self.assertNotIn("red-ocean-083530310.2.azurestaticapps.net", html)
+
 
 if __name__ == "__main__":
     unittest.main()
