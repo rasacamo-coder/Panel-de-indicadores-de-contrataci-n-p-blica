@@ -1,43 +1,43 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-07T11:12:56+00:00",
+  "generated_at_utc": "2026-11-08T11:25:27+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-07",
-    "downloaded_at_utc": "2026-11-07T11:12:54.639414+00:00",
-    "snapshot_sha256": "9e5de820939388e2c5117738476b70619586ab9f30c918d4fb894a57180fc6e5",
+    "source_updated_at": "2026-11-08",
+    "downloaded_at_utc": "2026-11-08T11:25:25.390362+00:00",
+    "snapshot_sha256": "869aba54e8eb8501c72202fe18fb71f28a5f3218cf5da4464025bacbc2add31d",
     "freshness_status": "reciente",
-    "record_count": 512
+    "record_count": 505
   },
   "summary": {
-    "notice_count": 512,
-    "distinct_organizations": 115,
-    "distinct_publication_dates": 46,
-    "deadlines_before_source_update_day": 9
+    "notice_count": 505,
+    "distinct_organizations": 111,
+    "distinct_publication_dates": 47,
+    "deadlines_before_source_update_day": 3
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
       "observed_field": "contratacion_fecha_de_publicacion_documento",
       "available": true,
-      "total_records": 512,
-      "non_empty_records": 512,
+      "total_records": 505,
+      "non_empty_records": 505,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_organo_contratacion": {
       "observed_field": "contratacion_organo_contratacion",
       "available": true,
-      "total_records": 512,
-      "non_empty_records": 512,
+      "total_records": 505,
+      "non_empty_records": 505,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_fecha_limite_presentacion": {
       "observed_field": "contratacion_fecha_limite_presentacion",
       "available": true,
-      "total_records": 512,
-      "non_empty_records": 512,
+      "total_records": 505,
+      "non_empty_records": 505,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     }
@@ -116,11 +116,11 @@
     },
     {
       "date": "2026-10-08",
-      "notice_count": 8
+      "notice_count": 7
     },
     {
       "date": "2026-10-09",
-      "notice_count": 11
+      "notice_count": 10
     },
     {
       "date": "2026-10-10",
@@ -144,7 +144,7 @@
     },
     {
       "date": "2026-10-15",
-      "notice_count": 11
+      "notice_count": 10
     },
     {
       "date": "2026-10-16",
@@ -168,11 +168,11 @@
     },
     {
       "date": "2026-10-21",
-      "notice_count": 11
+      "notice_count": 9
     },
     {
       "date": "2026-10-22",
-      "notice_count": 23
+      "notice_count": 19
     },
     {
       "date": "2026-10-23",
@@ -233,12 +233,16 @@
     {
       "date": "2026-11-06",
       "notice_count": 40
+    },
+    {
+      "date": "2026-11-07",
+      "notice_count": 2
     }
   ],
   "top_organizations": [
     {
       "organization": "Alcalde",
-      "notice_count": 79
+      "notice_count": 77
     },
     {
       "organization": "Director Gerente",
@@ -269,18 +273,18 @@
       "notice_count": 14
     },
     {
-      "organization": "Comisión Delegada en Materia de Contratación de ETS",
-      "notice_count": 12
+      "organization": "Consejo de Gobierno Foral",
+      "notice_count": 13
     },
     {
-      "organization": "Consejo de Gobierno Foral",
+      "organization": "Comisión Delegada en Materia de Contratación de ETS",
       "notice_count": 12
     }
   ],
   "activity_by_organization": [
     {
       "organization": "Alcalde",
-      "notice_count": 79,
+      "notice_count": 77,
       "activity_by_date": [
         {
           "date": "2026-10-13",
@@ -316,7 +320,7 @@
         },
         {
           "date": "2026-10-22",
-          "notice_count": 7
+          "notice_count": 5
         },
         {
           "date": "2026-10-23",
@@ -404,7 +408,7 @@
     },
     {
       "organization": "Alcalde-Presidente",
-      "notice_count": 7,
+      "notice_count": 6,
       "activity_by_date": [
         {
           "date": "2026-09-11",
@@ -412,10 +416,6 @@
         },
         {
           "date": "2026-10-05",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-08",
           "notice_count": 1
         },
         {
@@ -878,7 +878,7 @@
     },
     {
       "organization": "Consejo de Gobierno Foral",
-      "notice_count": 12,
+      "notice_count": 13,
       "activity_by_date": [
         {
           "date": "2026-10-12",
@@ -918,6 +918,10 @@
         },
         {
           "date": "2026-11-04",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-07",
           "notice_count": 1
         }
       ]
@@ -1025,16 +1029,6 @@
       ]
     },
     {
-      "organization": "Diputado/a Foral de Cultura y Deporte",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-22",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
       "organization": "Diputado/a Foral del Departamento de Empleo, Comercio, Turismo y Administración Foral",
       "notice_count": 1,
       "activity_by_date": [
@@ -1045,31 +1039,11 @@
       ]
     },
     {
-      "organization": "Diputado/a Foral del Departamento de Equilibrio Territorial y Ordenación del Territorio",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-22",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
       "organization": "Diputado/a Foral del Departamento de Movilidad Sostenible e Infraestructuras Viarias",
       "notice_count": 1,
       "activity_by_date": [
         {
           "date": "2026-10-16",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
-      "organization": "Diputado/a General",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-21",
           "notice_count": 1
         }
       ]
@@ -1788,18 +1762,10 @@
     },
     {
       "organization": "Gerente de la UPV/EHU",
-      "notice_count": 9,
+      "notice_count": 7,
       "activity_by_date": [
         {
-          "date": "2026-10-15",
-          "notice_count": 1
-        },
-        {
           "date": "2026-10-19",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-21",
           "notice_count": 1
         },
         {
@@ -2138,7 +2104,7 @@
     },
     {
       "organization": "Presidente",
-      "notice_count": 9,
+      "notice_count": 10,
       "activity_by_date": [
         {
           "date": "2026-10-06",
@@ -2167,6 +2133,10 @@
         {
           "date": "2026-11-05",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-07",
+          "notice_count": 1
         }
       ]
     },
@@ -2286,16 +2256,6 @@
       "activity_by_date": [
         {
           "date": "2026-10-15",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
-      "organization": "Vicepresidencia",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-09",
           "notice_count": 1
         }
       ]
