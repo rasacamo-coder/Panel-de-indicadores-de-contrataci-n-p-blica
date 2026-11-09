@@ -1,43 +1,43 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-08T11:25:27+00:00",
+  "generated_at_utc": "2026-11-09T13:08:25+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-08",
-    "downloaded_at_utc": "2026-11-08T11:25:25.390362+00:00",
-    "snapshot_sha256": "869aba54e8eb8501c72202fe18fb71f28a5f3218cf5da4464025bacbc2add31d",
+    "source_updated_at": "2026-11-09",
+    "downloaded_at_utc": "2026-11-09T13:08:23.332016+00:00",
+    "snapshot_sha256": "53047f1b7624b274373363aa91fc415a744e25cd0c5df6b43d6ec784368d8b48",
     "freshness_status": "reciente",
-    "record_count": 505
+    "record_count": 506
   },
   "summary": {
-    "notice_count": 505,
+    "notice_count": 506,
     "distinct_organizations": 111,
-    "distinct_publication_dates": 47,
+    "distinct_publication_dates": 48,
     "deadlines_before_source_update_day": 3
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
       "observed_field": "contratacion_fecha_de_publicacion_documento",
       "available": true,
-      "total_records": 505,
-      "non_empty_records": 505,
+      "total_records": 506,
+      "non_empty_records": 506,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_organo_contratacion": {
       "observed_field": "contratacion_organo_contratacion",
       "available": true,
-      "total_records": 505,
-      "non_empty_records": 505,
+      "total_records": 506,
+      "non_empty_records": 506,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_fecha_limite_presentacion": {
       "observed_field": "contratacion_fecha_limite_presentacion",
       "available": true,
-      "total_records": 505,
-      "non_empty_records": 505,
+      "total_records": 506,
+      "non_empty_records": 506,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     }
@@ -120,7 +120,7 @@
     },
     {
       "date": "2026-10-09",
-      "notice_count": 10
+      "notice_count": 9
     },
     {
       "date": "2026-10-10",
@@ -236,6 +236,10 @@
     },
     {
       "date": "2026-11-07",
+      "notice_count": 2
+    },
+    {
+      "date": "2026-11-08",
       "notice_count": 2
     }
   ],
@@ -408,7 +412,7 @@
     },
     {
       "organization": "Alcalde-Presidente",
-      "notice_count": 6,
+      "notice_count": 5,
       "activity_by_date": [
         {
           "date": "2026-09-11",
@@ -416,10 +420,6 @@
         },
         {
           "date": "2026-10-05",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-09",
           "notice_count": 1
         },
         {
@@ -1314,7 +1314,7 @@
     },
     {
       "organization": "Director General",
-      "notice_count": 11,
+      "notice_count": 12,
       "activity_by_date": [
         {
           "date": "2026-10-10",
@@ -1350,6 +1350,10 @@
         },
         {
           "date": "2026-11-05",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-08",
           "notice_count": 1
         }
       ]
@@ -1762,7 +1766,7 @@
     },
     {
       "organization": "Gerente de la UPV/EHU",
-      "notice_count": 7,
+      "notice_count": 8,
       "activity_by_date": [
         {
           "date": "2026-10-19",
@@ -1782,6 +1786,10 @@
         },
         {
           "date": "2026-11-06",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-08",
           "notice_count": 1
         }
       ]
