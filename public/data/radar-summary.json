@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-09T13:08:25+00:00",
+  "generated_at_utc": "2026-11-10T12:49:38+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-09",
-    "downloaded_at_utc": "2026-11-09T13:08:23.332016+00:00",
+    "source_updated_at": "2026-11-10",
+    "downloaded_at_utc": "2026-11-10T12:49:36.098756+00:00",
     "snapshot_sha256": "53047f1b7624b274373363aa91fc415a744e25cd0c5df6b43d6ec784368d8b48",
     "freshness_status": "reciente",
     "record_count": 506
@@ -14,7 +14,7 @@
     "notice_count": 506,
     "distinct_organizations": 111,
     "distinct_publication_dates": 48,
-    "deadlines_before_source_update_day": 3
+    "deadlines_before_source_update_day": 50
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
