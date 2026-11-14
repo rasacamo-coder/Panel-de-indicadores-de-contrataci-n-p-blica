@@ -1,20 +1,20 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-13T12:25:39+00:00",
+  "generated_at_utc": "2026-11-14T11:38:32+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-13",
-    "downloaded_at_utc": "2026-11-13T12:25:36.781188+00:00",
-    "snapshot_sha256": "731eda3260ad7cea6d4bf11ff5dbd536b80be7d94ef630bd579660d5dc6194b8",
+    "source_updated_at": "2026-11-14",
+    "downloaded_at_utc": "2026-11-14T11:38:29.120816+00:00",
+    "snapshot_sha256": "a9d6d66eab942a0a9aefb50637afedf880068233c19d2edc85821fe35cdfc7a3",
     "freshness_status": "reciente",
     "record_count": 496
   },
   "summary": {
     "notice_count": 496,
     "distinct_organizations": 107,
-    "distinct_publication_dates": 47,
-    "deadlines_before_source_update_day": 10
+    "distinct_publication_dates": 48,
+    "deadlines_before_source_update_day": 30
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
@@ -160,7 +160,7 @@
     },
     {
       "date": "2026-10-23",
-      "notice_count": 12
+      "notice_count": 11
     },
     {
       "date": "2026-10-25",
@@ -172,11 +172,11 @@
     },
     {
       "date": "2026-10-27",
-      "notice_count": 9
+      "notice_count": 8
     },
     {
       "date": "2026-10-28",
-      "notice_count": 21
+      "notice_count": 18
     },
     {
       "date": "2026-10-29",
@@ -237,6 +237,10 @@
     {
       "date": "2026-11-12",
       "notice_count": 31
+    },
+    {
+      "date": "2026-11-13",
+      "notice_count": 5
     }
   ],
   "top_organizations": [
@@ -250,7 +254,7 @@
     },
     {
       "organization": "Alcaldía",
-      "notice_count": 37
+      "notice_count": 35
     },
     {
       "organization": "Junta de Gobierno Local",
@@ -262,7 +266,7 @@
     },
     {
       "organization": "Pleno",
-      "notice_count": 26
+      "notice_count": 27
     },
     {
       "organization": "Alcalde del Ayuntamiento de Eibar",
@@ -277,7 +281,7 @@
       "notice_count": 12
     },
     {
-      "organization": "Gerente",
+      "organization": "Consejo de Gobierno Foral",
       "notice_count": 11
     }
   ],
@@ -452,7 +456,7 @@
     },
     {
       "organization": "Alcaldía",
-      "notice_count": 37,
+      "notice_count": 35,
       "activity_by_date": [
         {
           "date": "2026-10-04",
@@ -469,14 +473,6 @@
         {
           "date": "2026-10-26",
           "notice_count": 2
-        },
-        {
-          "date": "2026-10-27",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-28",
-          "notice_count": 1
         },
         {
           "date": "2026-10-29",
@@ -861,16 +857,6 @@
       ]
     },
     {
-      "organization": "Consejo de Administración de la Deportiva Municipal de Portugalete",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-23",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
       "organization": "Consejo de Administración de VISESA",
       "notice_count": 2,
       "activity_by_date": [
@@ -895,8 +881,18 @@
       ]
     },
     {
+      "organization": "Consejo de Dirección de Viviendas Municipales de Bilbao",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-13",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
       "organization": "Consejo de Gobierno Foral",
-      "notice_count": 10,
+      "notice_count": 11,
       "activity_by_date": [
         {
           "date": "2026-10-22",
@@ -928,6 +924,10 @@
         },
         {
           "date": "2026-11-07",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-13",
           "notice_count": 1
         }
       ]
@@ -1648,14 +1648,10 @@
     },
     {
       "organization": "Gerente",
-      "notice_count": 11,
+      "notice_count": 10,
       "activity_by_date": [
         {
           "date": "2026-10-21",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-28",
           "notice_count": 1
         },
         {
@@ -1748,10 +1744,14 @@
     },
     {
       "organization": "Junta de Gobierno de la Villa de Bilbao",
-      "notice_count": 1,
+      "notice_count": 2,
       "activity_by_date": [
         {
           "date": "2026-10-13",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-13",
           "notice_count": 1
         }
       ]
@@ -1906,7 +1906,7 @@
     },
     {
       "organization": "Pleno",
-      "notice_count": 26,
+      "notice_count": 27,
       "activity_by_date": [
         {
           "date": "2026-08-27",
@@ -1979,6 +1979,10 @@
         {
           "date": "2026-11-12",
           "notice_count": 3
+        },
+        {
+          "date": "2026-11-13",
+          "notice_count": 1
         }
       ]
     },
@@ -2059,16 +2063,6 @@
       ]
     },
     {
-      "organization": "Presidente de la Cuadrilla",
-      "notice_count": 1,
-      "activity_by_date": [
-        {
-          "date": "2026-10-28",
-          "notice_count": 1
-        }
-      ]
-    },
-    {
       "organization": "Presidente del Consejo de Administración",
       "notice_count": 2,
       "activity_by_date": [
@@ -2108,6 +2102,16 @@
       "activity_by_date": [
         {
           "date": "2026-10-16",
+          "notice_count": 1
+        }
+      ]
+    },
+    {
+      "organization": "Secretaría General de Comunicación e Innovación Social",
+      "notice_count": 1,
+      "activity_by_date": [
+        {
+          "date": "2026-11-13",
           "notice_count": 1
         }
       ]
