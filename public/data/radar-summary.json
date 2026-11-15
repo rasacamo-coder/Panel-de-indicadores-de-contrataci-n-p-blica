@@ -1,43 +1,43 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-14T11:38:32+00:00",
+  "generated_at_utc": "2026-11-15T12:05:44+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-14",
-    "downloaded_at_utc": "2026-11-14T11:38:29.120816+00:00",
-    "snapshot_sha256": "a9d6d66eab942a0a9aefb50637afedf880068233c19d2edc85821fe35cdfc7a3",
+    "source_updated_at": "2026-11-15",
+    "downloaded_at_utc": "2026-11-15T12:05:41.484713+00:00",
+    "snapshot_sha256": "118f2c636a12efdb685e63f35fe5338fa30e7507909c69f6956da6ad2f226ce3",
     "freshness_status": "reciente",
-    "record_count": 496
+    "record_count": 503
   },
   "summary": {
-    "notice_count": 496,
+    "notice_count": 503,
     "distinct_organizations": 107,
-    "distinct_publication_dates": 48,
-    "deadlines_before_source_update_day": 30
+    "distinct_publication_dates": 49,
+    "deadlines_before_source_update_day": 23
   },
   "field_completeness": {
     "contratacion_fecha_de_publicacion_documento": {
       "observed_field": "contratacion_fecha_de_publicacion_documento",
       "available": true,
-      "total_records": 496,
-      "non_empty_records": 496,
+      "total_records": 503,
+      "non_empty_records": 503,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_organo_contratacion": {
       "observed_field": "contratacion_organo_contratacion",
       "available": true,
-      "total_records": 496,
-      "non_empty_records": 496,
+      "total_records": 503,
+      "non_empty_records": 503,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     },
     "contratacion_fecha_limite_presentacion": {
       "observed_field": "contratacion_fecha_limite_presentacion",
       "available": true,
-      "total_records": 496,
-      "non_empty_records": 496,
+      "total_records": 503,
+      "non_empty_records": 503,
       "missing_or_empty_records": 0,
       "completeness_percent": 100.0
     }
@@ -241,6 +241,10 @@
     {
       "date": "2026-11-13",
       "notice_count": 5
+    },
+    {
+      "date": "2026-11-14",
+      "notice_count": 7
     }
   ],
   "top_organizations": [
@@ -253,16 +257,16 @@
       "notice_count": 45
     },
     {
+      "organization": "Consejo de Administración",
+      "notice_count": 37
+    },
+    {
       "organization": "Alcaldía",
       "notice_count": 35
     },
     {
       "organization": "Junta de Gobierno Local",
       "notice_count": 35
-    },
-    {
-      "organization": "Consejo de Administración",
-      "notice_count": 34
     },
     {
       "organization": "Pleno",
@@ -764,10 +768,14 @@
     },
     {
       "organization": "Consejero/a de Gobernanza, Administración Digital y Autogobierno",
-      "notice_count": 1,
+      "notice_count": 2,
       "activity_by_date": [
         {
           "date": "2026-11-03",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-14",
           "notice_count": 1
         }
       ]
@@ -784,7 +792,7 @@
     },
     {
       "organization": "Consejo de Administración",
-      "notice_count": 34,
+      "notice_count": 37,
       "activity_by_date": [
         {
           "date": "2026-10-08",
@@ -853,6 +861,10 @@
         {
           "date": "2026-11-12",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-14",
+          "notice_count": 3
         }
       ]
     },
@@ -1088,7 +1100,7 @@
     },
     {
       "organization": "Dirección de Régimen Jurídico, Económico y Servicios Generales",
-      "notice_count": 4,
+      "notice_count": 5,
       "activity_by_date": [
         {
           "date": "2026-10-27",
@@ -1105,12 +1117,16 @@
         {
           "date": "2026-11-09",
           "notice_count": 1
+        },
+        {
+          "date": "2026-11-14",
+          "notice_count": 1
         }
       ]
     },
     {
       "organization": "Dirección de Servicios",
-      "notice_count": 9,
+      "notice_count": 10,
       "activity_by_date": [
         {
           "date": "2026-10-18",
@@ -1146,6 +1162,10 @@
         },
         {
           "date": "2026-11-10",
+          "notice_count": 1
+        },
+        {
+          "date": "2026-11-14",
           "notice_count": 1
         }
       ]
@@ -2160,7 +2180,7 @@
     },
     {
       "organization": "Viceconsejería de Seguridad",
-      "notice_count": 3,
+      "notice_count": 4,
       "activity_by_date": [
         {
           "date": "2026-10-15",
@@ -2169,6 +2189,10 @@
         {
           "date": "2026-11-09",
           "notice_count": 2
+        },
+        {
+          "date": "2026-11-14",
+          "notice_count": 1
         }
       ]
     },
