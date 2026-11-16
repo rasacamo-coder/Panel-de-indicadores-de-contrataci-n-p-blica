@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-15T12:05:44+00:00",
+  "generated_at_utc": "2026-11-16T12:59:08+00:00",
   "source": {
     "dataset_url": "https://opendata.euskadi.eus/catalogo/-/contrataciones-administrativas-de-los-ultimos-dias/",
     "source_url": "https://opendata.euskadi.eus/contenidos/ds_contrataciones/ultimas_contrataciones_admin/opendata/contratos.json",
-    "source_updated_at": "2026-11-15",
-    "downloaded_at_utc": "2026-11-15T12:05:41.484713+00:00",
-    "snapshot_sha256": "118f2c636a12efdb685e63f35fe5338fa30e7507909c69f6956da6ad2f226ce3",
+    "source_updated_at": "2026-11-16",
+    "downloaded_at_utc": "2026-11-16T12:59:06.621487+00:00",
+    "snapshot_sha256": "78330826d866a7973f104ff46f005a736632fa94576c458dcc426303524162c7",
     "freshness_status": "reciente",
     "record_count": 503
   },
   "summary": {
     "notice_count": 503,
     "distinct_organizations": 107,
-    "distinct_publication_dates": 49,
+    "distinct_publication_dates": 50,
     "deadlines_before_source_update_day": 23
   },
   "field_completeness": {
@@ -180,7 +180,7 @@
     },
     {
       "date": "2026-10-29",
-      "notice_count": 23
+      "notice_count": 22
     },
     {
       "date": "2026-10-30",
@@ -245,6 +245,10 @@
     {
       "date": "2026-11-14",
       "notice_count": 7
+    },
+    {
+      "date": "2026-11-15",
+      "notice_count": 1
     }
   ],
   "top_organizations": [
@@ -258,7 +262,7 @@
     },
     {
       "organization": "Consejo de Administración",
-      "notice_count": 37
+      "notice_count": 38
     },
     {
       "organization": "Alcaldía",
@@ -792,7 +796,7 @@
     },
     {
       "organization": "Consejo de Administración",
-      "notice_count": 37,
+      "notice_count": 38,
       "activity_by_date": [
         {
           "date": "2026-10-08",
@@ -865,6 +869,10 @@
         {
           "date": "2026-11-14",
           "notice_count": 3
+        },
+        {
+          "date": "2026-11-15",
+          "notice_count": 1
         }
       ]
     },
@@ -1730,7 +1738,7 @@
     },
     {
       "organization": "Junta de Gobierno",
-      "notice_count": 8,
+      "notice_count": 7,
       "activity_by_date": [
         {
           "date": "2026-10-08",
@@ -1746,10 +1754,6 @@
         },
         {
           "date": "2026-10-25",
-          "notice_count": 1
-        },
-        {
-          "date": "2026-10-29",
           "notice_count": 1
         },
         {
